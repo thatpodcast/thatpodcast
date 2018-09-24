@@ -1,6 +1,12 @@
+@tailwind preflight;
+@tailwind components;
+
+
 $primary-color: #333;
 
 body {
     background-color: lightgray;
     color: $primary-color;
 }
+
+@tailwind utilities;

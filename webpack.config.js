@@ -19,7 +19,10 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // enables Sass/SCSS support
-    .enableSassLoader()
+    .enableSassLoader(function (options) {}, {
+        resolveUrlLoader: false
+    })
+    .enablePostCssLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
