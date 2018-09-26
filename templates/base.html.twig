@@ -2,11 +2,31 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        {% block stylesheets %}
+        {% endblock %}
     </head>
     <body>
+        <nav class="font-normal text-base md:px-2 md:flex md:justify-between md:max-w-md md:m-auto lg:max-w-lg xl:max-w-xl">
+            <ul class="p-2 list-reset md:p-0 md:flex-1 md:flex md:items-center">
+                <li>
+                    <div class="w-16 h-16 bg-blue">LOGO</div>
+                </li>
+                <li class="py-1 md:py-0 md:px-2">Episodes</li>
+                <li class="py-1 md:py-0 md:px-2">Newsletter</li>
+                <li class="py-1 md:py-0 md:px-2">About</li>
+            </ul>
+            <ul class="list-reset invisible md:visible md:flex-1 md:flex md:justify-end  md:items-center">
+                <li class="md:px-2">Apple Podcasts</li>
+                <li class="md:px-2">Spotify</li>
+                <li class="md:px-2">Stitcher</li>
+                <li class="md:px-2">Floof</li>
+            </ul>
+        </nav>
         {% block body %}{% endblock %}
+        <script src="{{ asset('build/app.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
