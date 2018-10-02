@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Podcast;
+use App\Entity\Episode;
 
 interface Episodes
 {

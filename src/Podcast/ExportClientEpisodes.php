@@ -4,6 +4,7 @@ namespace App\Podcast;
 
 use App\Ingest\ExportClient;
 use Tightenco\Collect\Support\Collection;
+use App\Entity\Episode;
 
 class ExportClientEpisodes implements Episodes
 {
