@@ -1,0 +1,6 @@
+easy_admin:
+    entities:
+        Episode:
+            class: App\Entity\Episode
+            list:
+                sort: 'numberForSort'

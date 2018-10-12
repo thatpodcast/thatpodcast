@@ -1,0 +1,24 @@
+{%- macro friendlyDuration(duration) -%}
+    {{ ('@'~duration)|date("H:i:s", "UTC") }}
+{%- endmacro -%}
+
+{% macro friendlyFileSize(fileSize) %}
+    {% spaceless %}
+        {% set kilobyte = 1024 %}
+        {% set megabyte = kilobyte * 1024 %}
+        {% set gigabyte = megabyte * 1024 %}
+        {% set terabyte = gigabyte * 1024 %}
+
+        {% if fileSize < kilobyte %}
+            {{ page.fileSize ~ ' B' }}
+        {% elseif fileSize < megabyte %}
+            {{ (fileSize / kilobyte)|number_format(2, '.') ~ ' KB' }}
+        {% elseif fileSize < gigabyte %}
+            {{ (fileSize / megabyte)|number_format(2, '.') ~ ' MB' }}
+        {% elseif fileSize < terabyte %}
+            {{ (fileSize / gigabyte)|number_format(2, '.') ~ ' GB' }}
+        {% else %}
+            {{ (fileSize / terabyte)|number_format(2, '.') ~ ' TB' }}
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

@@ -9,23 +9,99 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="font-normal text-base md:px-2 md:flex md:justify-between md:max-w-md md:m-auto lg:max-w-lg xl:max-w-xl">
-            <ul class="p-2 list-reset md:p-0 md:flex-1 md:flex md:items-center">
-                <li>
-                    <div class="w-16 h-16 bg-blue">LOGO</div>
-                </li>
-                <li class="py-1 md:py-0 md:px-2">Episodes</li>
-                <li class="py-1 md:py-0 md:px-2">Newsletter</li>
-                <li class="py-1 md:py-0 md:px-2">About</li>
-            </ul>
-            <ul class="list-reset invisible md:visible md:flex-1 md:flex md:justify-end  md:items-center">
-                <li class="md:px-2">Apple Podcasts</li>
-                <li class="md:px-2">Spotify</li>
-                <li class="md:px-2">Stitcher</li>
-                <li class="md:px-2">Floof</li>
-            </ul>
-        </nav>
+        <div id="hero-and-nav">
+            <nav class="font-normal text-base py-4 md:flex md:justify-between md:m-auto container">
+                <ul class="list-reset md:p-0 md:flex-1 md:flex md:items-center">
+                    <li class="md:pr-2">
+                        <a class="no-underline" href="{{ path('home') }}">
+                            {{ svg('assets/svg/thatpodcast-logo.svg', {classes: 'h-8 md:h-16 block'}) }}
+                        </a>
+                    </li>
+                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('home') }}">Episodes</a></li>
+                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('newsletter') }}">Newsletter</a></li>
+                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('about') }}">About</a></li>
+                </ul>
+                <ul class="right-menu list-reset invisible lg:visible md:flex-1 md:flex md:justify-end  md:items-center">
+                    <li class="px-2">
+                        <a href="https://itunes.apple.com/us/podcast/that-podcast/id881491539">
+                            {{ svg('node_modules/simple-icons/icons/podcasts.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://open.spotify.com/show/3XYrUZnOFi4dV2aM3PxnYc">
+                            {{ svg('node_modules/simple-icons/icons/spotify.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="http://www.stitcher.com/podcast/that-podcast?refid=stpr">
+                            {{ svg('node_modules/simple-icons/icons/stitcher.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://thatpodcast.io/itunes.rss">
+                            {{ svg('node_modules/simple-icons/icons/rss.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://twitter.com/thatpodcast">
+                            {{ svg('node_modules/simple-icons/icons/twitter.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://www.facebook.com/pages/That-Podcast/318310284991754">
+                            {{ svg('node_modules/simple-icons/icons/facebook.svg', {classes: 'h-4 block'}) }}
+                        </a></li>
+                    <li class="px-2">
+                        <a href="https://github.com/thatpodcast">
+                            {{ svg('node_modules/simple-icons/icons/github.svg', {classes: 'h-4 block'}) }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {% block hero %}{% endblock %}
+        </div>
         {% block body %}{% endblock %}
+
+        <footer role="contentinfo" class="py-8 bg-black">
+            <div class="text-center">
+                <ul class="list-reset inline-flex items-center">
+                    <li class="px-2">
+                        <a href="https://itunes.apple.com/us/podcast/that-podcast/id881491539">
+                            {{ svg('node_modules/simple-icons/icons/podcasts.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://open.spotify.com/show/3XYrUZnOFi4dV2aM3PxnYc">
+                            {{ svg('node_modules/simple-icons/icons/spotify.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="http://www.stitcher.com/podcast/that-podcast?refid=stpr">
+                            {{ svg('node_modules/simple-icons/icons/stitcher.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://thatpodcast.io/itunes.rss">
+                            {{ svg('node_modules/simple-icons/icons/rss.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://twitter.com/thatpodcast">
+                            {{ svg('node_modules/simple-icons/icons/twitter.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                    <li class="px-2">
+                        <a href="https://www.facebook.com/pages/That-Podcast/318310284991754">
+                            {{ svg('node_modules/simple-icons/icons/facebook.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a></li>
+                    <li class="px-2">
+                        <a href="https://github.com/thatpodcast">
+                            {{ svg('node_modules/simple-icons/icons/github.svg', {classes: 'h-4 block text-white fill-current'}) }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
         <script src="{{ asset('build/app.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>

@@ -13,5 +13,11 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production"
+    },
+    "dependencies": {
+        "jplayer": "^2.9.2",
+        "jquery": "^3.3.1",
+        "simple-icons": "^1.9.6",
+        "swf-loader": "^1.0.1"
     }
 }

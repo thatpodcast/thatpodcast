@@ -4,6 +4,7 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
     .addEntry('app', './assets/js/app.js')
+    .addEntry('player', './assets/js/player.js')
 
     /*
      * FEATURE CONFIG
@@ -23,6 +24,8 @@ Encore
         resolveUrlLoader: false
     })
     .enablePostCssLoader()
+    .autoProvidejQuery()
+
 ;
 
 module.exports = Encore.getWebpackConfig();

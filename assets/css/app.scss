@@ -1,12 +1,30 @@
 @tailwind preflight;
 @tailwind components;
 
-
 $primary-color: #333;
 
 body {
     background-color: lightgray;
     color: $primary-color;
 }
+
+#hero-and-nav {
+    background-size: auto,auto,cover;
+    background-position: 50%,50%,50%;
+    @apply text-white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+
+    a {
+        @apply text-white no-underline;
+    }
+
+    .right-menu svg {
+        @apply fill-current;
+    }
+}
+
+.transcript__speaker { font-weight: bold; }
+.transcript__time { font-style: italic; font-size: smaller; margin-left: 1em; opacity: .5;}
+.transcript__content { display: block; }
 
 @tailwind utilities;

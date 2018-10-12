@@ -1,6 +1,14 @@
 require('../css/app.scss');
+/*
+require('simple-icons/icons/twitter');
+require('simple-icons/icons/facebook');
+require('simple-icons/icons/rss');
+require('simple-icons/icons/github');
+require('simple-icons/icons/spotify');
+require('simple-icons/icons/podcasts');
+require('simple-icons/icons/stitcher');
+*/
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// var $ = require('jquery');
-
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+require('../images/red-mic.jpg');
+require('../images/hexellence.png');
+require('../svg/thatpodcast-logo.svg');

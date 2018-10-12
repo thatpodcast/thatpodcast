@@ -6,15 +6,19 @@ use App\Repository\EpisodeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class ItunesController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/itunes.rss", defaults={"_format"="rss+xml"}, name="itunes")
      */
     public function index(EpisodeRepository $episodeRepository)
     {
-        return $this->render('home.html.twig', [
+        $response = $this->render('itunes.xml.twig', [
             'episodes' => $episodeRepository->findAllSorted(),
         ]);
+
+        $response->headers->set('Content-Type', 'application/rss+xml');
+
+        return $response;
     }
 }

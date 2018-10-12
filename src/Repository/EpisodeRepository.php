@@ -19,6 +19,17 @@ class EpisodeRepository extends ServiceEntityRepository
         parent::__construct($registry, Episode::class);
     }
 
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.numberForSort', 'ASC')
+            ->setMaxResults(1000)
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
     public function findOneByGuid($guid): ?Episode
     {
         return $this->createQueryBuilder('e')

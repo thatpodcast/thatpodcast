@@ -24,6 +24,11 @@ class Episode
     private $number;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $numberForSort;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $guid;
@@ -103,6 +108,12 @@ class Episode
      */
     private $transcriptHtml;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var \DateTime
+     */
+    private $publishedDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,6 +122,11 @@ class Episode
     public function getNumber(): ?string
     {
         return $this->number;
+    }
+
+    public function getNumberForSort(): ?string
+    {
+        return $this->numberForSort;
     }
 
     public function setNumber(?string $number): self
@@ -312,19 +328,85 @@ class Episode
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getPublishedDate(): \DateTime
+    {
+        return $this->publishedDate;
+    }
+
+    /**
+     * @param \DateTime $publishedDate
+     */
+    public function setPublishedDate(\DateTime $publishedDate): void
+    {
+        $this->publishedDate = $publishedDate;
+    }
+
+    public function getDownloadUrl(): string
+    {
+        return $this->mediaUrl;
+    }
+
+    public function getRssUrl(): string
+    {
+        return $this->mediaUrl;
+    }
+
+    static private function convertHoursMinutesSecondsToSeconds($input): int
+    {
+        list ($hours, $minutes, $seconds) = explode(':', $input);
+
+        return $seconds + ($minutes * 60) + ($hours * 60 * 60);
+    }
+
+    static private function extractPathFromExportedPath($exportedPath): string
+    {
+        list ($junk, $junk, $path) = explode('/', $exportedPath);
+
+        return $path;
+    }
+    
+    public function refreshFrom(Episode $episode)
+    {
+        $this->number = $episode->getNumber();//umber'];
+        $this->numberForSort = $episode->getNumberForSort();
+        $this->guid = $episode->getGuid(); //uid'];
+        $this->title = $episode->getTitle(); //itle'];
+        $this->subtitle = $episode->getSubtitle(); //ubtitle'];
+        $this->publishedDate = $episode->getPublishedDate();
+        $this->mediaUrl = $episode->getMediaUrl(); //media_url'];
+        $this->duration = $episode->getDuration(); //static::convertHoursMinutesSecondsToSeconds($episode->getduration']);
+        $this->fileSize = $episode->getFileSize(); //getfile_size'];
+        $this->path = $episode->getPath(); //path'];
+
+        $this->backgroundImageUrl = $episode->getBackgroundImageUrl();
+        $this->backgroundImageWidth = $episode->getBackgroundImageWidth();
+        $this->backgroundImageHeight = $episode->getBackgroundImageHeight();
+        $this->backgroundImageCreditBy = $episode->getBackgroundImageCreditBy();
+        $this->backgroundImageCreditUrl = $episode->getBackgroundImageCreditUrl();
+        $this->backgroundImageCreditDescription = $episode->getBackgroundImageCreditDescription();
+
+        $this->contentHtml = $episode->getContentHtml();
+        $this->itunesSummaryHtml = $episode->getItunesSummaryHtml();
+        $this->transcriptHtml = $episode->getTranscriptHtml();
+    }
+
     static public function fromJsonExport($export)
     {
         $instance = new static();
 
         $instance->number = $export['number'];
+        $instance->numberForSort = sprintf('%010.1f', $export['number']);
         $instance->guid = $export['guid'];
         $instance->title = $export['title'];
         $instance->subtitle = $export['subtitle'];
-        $instance->date = $export['date'];
+        $instance->publishedDate = new \DateTime(sprintf('@%d', $export['date']));
         $instance->mediaUrl = $export['media_url'];
-        $instance->duration = $export['duration'];
+        $instance->duration = static::convertHoursMinutesSecondsToSeconds($export['duration']);
         $instance->fileSize = $export['file_size'];
-        $instance->path = $export['path'];
+        $instance->path = static::extractPathFromExportedPath($export['path']);
 
         $instance->backgroundImageUrl = $export['background_image']['url'];
         $instance->backgroundImageWidth = $export['background_image']['width'] ?: null;
