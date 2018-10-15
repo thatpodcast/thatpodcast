@@ -4,3 +4,11 @@ easy_admin:
             class: App\Entity\Episode
             list:
                 sort: 'numberForSort'
+                fields:
+                - { property: 'backgroundImageUrl', type: 'file', base_path: '%app.path.uploads%' }
+            form:
+                fields:
+                    - { property: 'backgroundImageFile', type: 'file' }
+            show:
+                fields:
+                    - { property: 'backgroundImage', type: 'image', base_path: '%app.path.uploads%' }

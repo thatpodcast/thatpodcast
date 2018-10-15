@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\EpisodeRepository")
+ * @Vich\Uploadable
  */
 class Episode
 {
@@ -113,6 +116,18 @@ class Episode
      * @var \DateTime
      */
     private $publishedDate;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var \DateTime
+     */
+    private $backgroundImageUpdated;
+
+    /**
+     * @Vich\UploadableField(mapping="episode_background_image", fileNameProperty="backgroundImageUrl")
+     * @var File
+     */
+    private $backgroundImageFile;
 
     public function getId(): ?int
     {
@@ -230,6 +245,20 @@ class Episode
         $this->backgroundImageUrl = $backgroundImageUrl;
 
         return $this;
+    }
+
+    public function setBackgroundImageFile(File $image = null)
+    {
+        $this->backgroundImageFile = $image;
+
+        if ($image) {
+            $this->backgroundImageUpdated = new \DateTime('now');
+        }
+    }
+
+    public function getBackgroundImageFile(): ?File
+    {
+        return $this->backgroundImageFile;
     }
 
     public function getBackgroundImageWidth(): ?int
@@ -367,7 +396,7 @@ class Episode
 
         return $path;
     }
-    
+
     public function refreshFrom(Episode $episode)
     {
         $this->number = $episode->getNumber();//umber'];

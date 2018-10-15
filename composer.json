@@ -8,7 +8,9 @@
         "api-platform/api-pack": "^1.1",
         "easycorp/easyadmin-bundle": "^1.17",
         "guzzlehttp/guzzle": "^6.3",
+        "league/flysystem": "^1.0",
         "manuelodelain/svg-twig-extension": "^0.1.0",
+        "oneup/flysystem-bundle": "^3.0",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
@@ -19,7 +21,8 @@
         "symfony/twig-bundle": "*",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "*",
-        "tightenco/collect": "^5.7"
+        "tightenco/collect": "^5.7",
+        "vich/uploader-bundle": "^1.8"
     },
     "require-dev": {
         "symfony/dotenv": "*",
@@ -66,7 +69,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "4.1.*"
         }
     }

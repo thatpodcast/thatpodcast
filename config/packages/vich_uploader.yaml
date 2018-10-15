@@ -1,0 +1,11 @@
+parameters:
+    app.path.uploads: "http://uploads.thatpodcast.test"
+
+vich_uploader:
+    db_driver: orm
+    storage: flysystem
+
+    mappings:
+        episode_background_image:
+            uri_prefix: "%app.path.uploads%"
+            upload_destination: default_filesystem

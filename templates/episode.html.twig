@@ -60,17 +60,13 @@
             /*url(https://www.transparenttextures.com/patterns/carbon-fibre.png),*/
                     url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
                     linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.25)),
-                    url({{ episode.backgroundImageUrl }});
+                    url({{ vich_uploader_asset(episode, 'backgroundImageFile') }});
         }
     </style>
 
 {% endblock %}
 
 {% block body %}
-
-
-
-
     <div class="container py-16">
         <time class="block pb-4" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
             <span class='month'>{{ episode.publishedDate|date('M') }}</span> <span class='day'>{{ episode.publishedDate|date('jS') }}</span> <span class='year'>{{ episode.publishedDate|date('Y') }}</span>
