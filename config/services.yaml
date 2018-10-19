@@ -30,6 +30,9 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    Vich\UploaderBundle\Adapter\AdapterInterface:
+        alias: vich_uploader.adapter.orm
+
     manuelodelain\Twig\Extension\SvgExtension:
         arguments:
             $basePath: '%kernel.project_dir%'

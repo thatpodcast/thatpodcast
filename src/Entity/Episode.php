@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 
 /**
  * @ApiResource()
@@ -124,10 +125,40 @@ class Episode
     private $backgroundImageUpdated;
 
     /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var \DateTime
+     */
+    private $pristineMediaUpdated;
+
+    /**
      * @Vich\UploadableField(mapping="episode_background_image", fileNameProperty="backgroundImageUrl")
      * @var File
      */
     private $backgroundImageFile;
+
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="episode_pristine_media", fileNameProperty="pristineMedia.name", size="pristineMedia.size", mimeType="pristineMedia.mimeType", originalName="pristineMedia.originalName")
+     *
+     * @var File
+     */
+    private $pristineMediaFile;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     *
+     * @var EmbeddedFile
+     */
+    private $pristineMedia;
+
+    /**
+     * Episode constructor.
+     */
+    public function __construct()
+    {
+        $this->pristineMediaFile = new EmbeddedFile();
+    }
 
     public function getId(): ?int
     {
@@ -383,6 +414,52 @@ class Episode
         return $this->mediaUrl;
     }
 
+    public function getBackgroundImageDirectory()
+    {
+        return $this->getGuid();
+    }
+
+    public function getPristineMediaDirectory(): string
+    {
+        return $this->getGuid();
+    }
+
+    /**
+     * @return File
+     */
+    public function getPristineMediaFile(): ?File
+    {
+        return $this->pristineMediaFile;
+    }
+
+    /**
+     * @param File $pristineMediaFile
+     */
+    public function setPristineMediaFile(?File $pristineMediaFile = null): void
+    {
+        $this->pristineMediaFile = $pristineMediaFile;
+
+        if (null !== $pristineMediaFile) {
+            $this->pristineMediaUpdated = new \DateTimeImmutable();
+        }
+    }
+
+    /**
+     * @return EmbeddedFile
+     */
+    public function getPristineMedia(): ?EmbeddedFile
+    {
+        return $this->pristineMedia;
+    }
+
+    /**
+     * @param EmbeddedFile $pristineMedia
+     */
+    public function setPristineMedia(EmbeddedFile $pristineMedia): void
+    {
+        $this->pristineMedia = $pristineMedia;
+    }
+
     static private function convertHoursMinutesSecondsToSeconds($input): int
     {
         list ($hours, $minutes, $seconds) = explode(':', $input);
@@ -399,16 +476,16 @@ class Episode
 
     public function refreshFrom(Episode $episode)
     {
-        $this->number = $episode->getNumber();//umber'];
+        $this->number = $episode->getNumber();
         $this->numberForSort = $episode->getNumberForSort();
-        $this->guid = $episode->getGuid(); //uid'];
-        $this->title = $episode->getTitle(); //itle'];
-        $this->subtitle = $episode->getSubtitle(); //ubtitle'];
+        $this->guid = $episode->getGuid();
+        $this->title = $episode->getTitle();
+        $this->subtitle = $episode->getSubtitle();
         $this->publishedDate = $episode->getPublishedDate();
-        $this->mediaUrl = $episode->getMediaUrl(); //media_url'];
-        $this->duration = $episode->getDuration(); //static::convertHoursMinutesSecondsToSeconds($episode->getduration']);
-        $this->fileSize = $episode->getFileSize(); //getfile_size'];
-        $this->path = $episode->getPath(); //path'];
+        $this->mediaUrl = $episode->getMediaUrl();
+        $this->duration = $episode->getDuration();
+        $this->fileSize = $episode->getFileSize();
+        $this->path = $episode->getPath();
 
         $this->backgroundImageUrl = $episode->getBackgroundImageUrl();
         $this->backgroundImageWidth = $episode->getBackgroundImageWidth();

@@ -7,5 +7,15 @@ vich_uploader:
 
     mappings:
         episode_background_image:
-            uri_prefix: "%app.path.uploads%"
-            upload_destination: default_filesystem
+            uri_prefix: "%app.path.uploads%/episodes"
+            upload_destination: "episode_filesystem"
+            directory_namer:
+                service: "vich_uploader.namer_directory_property"
+                options: { property: 'backgroundImageDirectory', transliterate: true}
+
+        episode_pristine_media:
+            uri_prefix: "%app.path.uploads%/episodes"
+            upload_destination: "episode_filesystem"
+            directory_namer:
+                service: "vich_uploader.namer_directory_property"
+                options: { property: 'pristineMediaDirectory', transliterate: true}

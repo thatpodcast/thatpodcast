@@ -5,10 +5,9 @@ easy_admin:
             list:
                 sort: 'numberForSort'
                 fields:
-                - { property: 'backgroundImageUrl', type: 'file', base_path: '%app.path.uploads%' }
+                - { property: 'backgroundImageUrl', fileProperty: 'backgroundImageFile', template: 'vich_uploader_image.html.twig' }
+                - { property: 'pristineMediaUrl', fileProperty: 'pristineMediaFile', template: 'vich_uploader_audio.html.twig' }
             form:
                 fields:
                     - { property: 'backgroundImageFile', type: 'file' }
-            show:
-                fields:
-                    - { property: 'backgroundImage', type: 'image', base_path: '%app.path.uploads%' }
+                    - { property: 'pristineMediaFile', type: 'file' }
