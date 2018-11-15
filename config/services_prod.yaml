@@ -1,0 +1,22 @@
+parameters:
+    env(FLYSYSTEM_S3_KEY): ''
+    env(FLYSYSTEM_S3_SECRET): ''
+    env(FLYSYSTEM_S3_REGION): ''
+    env(FLYSYSTEM_S3_BUCKET): ''
+
+    flysystem.s3.key: '%env(resolve:FLYSYSTEM_S3_KEY)%'
+    flysystem.s3.secret: '%env(resolve:FLYSYSTEM_S3_SECRET)%'
+    flysystem.s3.region: '%env(resolve:FLYSYSTEM_S3_REGION)%'
+    flysystem.s3.bucket: '%env(resolve:FLYSYSTEM_S3_BUCKET)%'
+
+services:
+    flysystem.s3.client:
+        class: Aws\S3\S3Client
+        factory_class: Aws\S3\S3Client
+        factory_method: factory
+        arguments:
+            -
+                key: "%flysystem.s3.key%"
+                secret: "%flysystem.s3.secret%"
+                signature: "v4"
+                region: "%flysystem.s3.region%"

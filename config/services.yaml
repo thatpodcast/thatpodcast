@@ -7,6 +7,8 @@ parameters:
     env(SYMFONY_ROUTER_REQUEST_CONTEXT_HOST): 'localhost'
     env(SYMFONY_ROUTER_REQUEST_CONTEXT_SCHEME): 'https'
 
+    env(FLYSYSTEM_CONTENT_URL): 'https://uploads.thatpodcast.test'
+
     locale: 'en'
 
     router.request_context.host: '%env(resolve:SYMFONY_ROUTER_REQUEST_CONTEXT_HOST)%'
@@ -14,6 +16,8 @@ parameters:
     router.request_context.base_url: ''
     asset.request_context.base_path: '%router.request_context.base_url%'
     asset.request_context.secure: true
+
+    flysystem.content.url: '%env(resolve:FLYSYSTEM_CONTENT_URL)%'
 
 services:
     # default configuration for services in *this* file
@@ -59,7 +63,7 @@ services:
 
     App\FlysystemAssetManager\FlysystemAssetManager:
         arguments:
-            $urlMapping: { 'content': 'https://uploads.thatpodcast.test' }
+            $urlMapping: { 'content': '%flysystem.content.url%' }
             $filesystemMapping: { 'content': '@oneup_flysystem.content_filesystem' }
 
     App\MessageHandlers\Commands\ProcessPristineMediaHandler:

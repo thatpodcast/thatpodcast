@@ -1,17 +1,10 @@
 # Read the documentation: https://github.com/1up-lab/OneupFlysystemBundle/tree/master/Resources/doc/index.md
 oneup_flysystem:
     adapters:
-        episodes:
-            local:
-                directory: '%kernel.project_dir%/../uploads.thatpodcast/episodes'
         content:
             local:
                 directory: '%kernel.project_dir%/../uploads.thatpodcast'
     filesystems:
-        episodes:
-            adapter: episodes
-            alias: League\Flysystem\Filesystem
-            mount: episodes
         content:
             adapter: content
             alias: League\Flysystem\Filesystem

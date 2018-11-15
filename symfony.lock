@@ -11,6 +11,9 @@
             "ref": "18727d8f229306860b46955f438e1897421da689"
         }
     },
+    "aws/aws-sdk-php": {
+        "version": "3.71.6"
+    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
@@ -113,11 +116,17 @@
     "league/flysystem": {
         "version": "1.0.48"
     },
+    "league/flysystem-aws-s3-v3": {
+        "version": "1.0.21"
+    },
     "manuelodelain/svg-twig-extension": {
         "version": "0.1"
     },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.4.0"
     },
     "nelmio/cors-bundle": {
         "version": "1.5",
