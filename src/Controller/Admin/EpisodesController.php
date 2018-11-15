@@ -162,7 +162,7 @@ class EpisodesController extends AbstractController
                     'content',
                     Episode::generateBackgroundImagePath($episode, $uploadedFile->getClientOriginalName()),
                     $uploadedFile->getClientMimeType(),
-                    $uploadedFile->getSize()
+                    filesize($tmpFile)
                 );
 
                 $episode->setBackgroundImage($file);
@@ -176,6 +176,8 @@ class EpisodesController extends AbstractController
                 }
 
                 $flysystemAssetManager->writeFromFile($file, $tmpFile);
+
+                unlink($tmpFile);
             }
 
             if ($episodeDto->pristineMedia) {
