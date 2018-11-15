@@ -10,3 +10,4 @@ oneup_flysystem:
         content:
             adapter: content
             alias: League\Flysystem\Filesystem
+            visibility: public
