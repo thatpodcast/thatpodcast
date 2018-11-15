@@ -4,7 +4,16 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    env(SYMFONY_ROUTER_REQUEST_CONTEXT_HOST): 'localhost'
+    env(SYMFONY_ROUTER_REQUEST_CONTEXT_SCHEME): 'https'
+
     locale: 'en'
+
+    router.request_context.host: '%env(resolve:SYMFONY_ROUTER_REQUEST_CONTEXT_HOST)%'
+    router.request_context.scheme: '%env(resolve:SYMFONY_ROUTER_REQUEST_CONTEXT_SCHEME)%'
+    router.request_context.base_url: ''
+    asset.request_context.base_path: '%router.request_context.base_url%'
+    asset.request_context.secure: true
 
 services:
     # default configuration for services in *this* file
