@@ -1,0 +1,14 @@
+framework:
+    messenger:
+        transports:
+            amqp: '%env(MESSENGER_TRANSPORT_DSN)%'
+
+        routing:
+            '*': amqp
+
+        default_bus: messenger.bus.default
+
+        buses:
+            messenger.bus.default: ~
+            messenger.bus.commands: ~
+            messenger.bus.events: ~

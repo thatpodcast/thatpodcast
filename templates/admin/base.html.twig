@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('build/admin.css') }}">
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<nav>
+    <ul>
+        <li>
+            <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_episodes') }}">Episodes</a>
+        </li>
+    </ul>
+</nav>
+{% block body %}{% endblock %}
+<script src="{{ asset('build/admin.js') }}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

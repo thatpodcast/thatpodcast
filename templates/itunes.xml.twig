@@ -34,7 +34,7 @@
                     <![CDATA[{{ episode.itunesSummaryHtml|raw }}]]>
                 </itunes:summary>
                 <itunes:image href="http://thatpodcast.io/assets/images/thatpodcast-cover.jpg"/>
-                <enclosure url="{{ episode.rssUrl }}" length="{{ episode.fileSize }}" type="audio/mp3"/>
+                <enclosure url="{{ flysystem_managed_asset_url(episode.rss) }}" length="{{ episode.fileSize }}" type="audio/mp3"/>
                 <guid>{{ episode.guid }}</guid>
                 <pubDate>{{ episode.publishedDate|date("D, d M Y H:i:s O", "Etc/UTC") }}</pubDate>
                 <itunes:duration>{{ helpers.friendlyDuration(episode.duration) }}</itunes:duration>

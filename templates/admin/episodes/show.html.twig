@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+{% import "helpers.html.twig" as helpers %}
+{% block body %}
+    <div class="container">
+        <ul class="list-reset pb-4">
+            <li>
+                <a class="border-2 border-green bg-green-lighter rounded py-2 px-4 inline-block no-underline text-green-darkest" href="{{ path('admin_episodes_edit', {id: episode.id}) }}">Edit</a>
+            </li>
+        </ul>
+        <article>
+            <time class="" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
+                <span class='month'>{{ episode.publishedDate|date('M') }}</span> <span class='day'>{{ episode.publishedDate|date('jS') }}</span> <span class='year'>{{ episode.publishedDate|date('Y') }}</span> <span class='time-zone'>{{ episode.publishedDate|date('e') }}</span>
+            </time>
+            <header>
+                <h1><a class="no-underline text-black" href="{{ path('admin_episodes_show', {id: episode.id}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
+                <h2 class="text-grey-darker font-normal py-2 xl:text-lg">{{ episode.subtitle }}</h2>
+            </header>
+
+
+            {% if episode.download %}
+                <div class="controls text-sm">
+                    <p class="flex">
+                        <span class="duration">{{ helpers.friendlyDuration(episode.duration) }}</span>
+                        <span class="size pl-2">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
+                        <span class="download pl-2"><a class="flex no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-4 fill-current mr-1'}) }} download</a></span>
+                    </p>
+                </div>
+            {% endif %}
+
+            {% if episode.backgroundImage %}
+                <div>
+                    <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.backgroundImage) }}">
+                </div>
+            {% endif %}
+        </article>
+    </div>
+{% endblock %}

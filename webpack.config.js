@@ -4,6 +4,7 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
     .addEntry('app', './assets/js/app.js')
+    .addEntry('admin', './assets/js/admin.js')
     .addEntry('player', './assets/js/player.js')
 
     /*

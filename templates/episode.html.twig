@@ -22,14 +22,14 @@
                 <p class="flex">
                     <span class="duration">{{ helpers.friendlyDuration(episode.duration) }}</span>
                     <span class="size pl-2">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
-                    <span class="download pl-2"><a class="flex no-underline" href="{{ episode.downloadUrl }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-4 fill-current mr-1'}) }} download</a></span>
+                    <span class="download pl-2"><a class="flex no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-4 fill-current mr-1'}) }} download</a></span>
                 </p>
             </div>
         </div>
         <div>
             <div style="position: relative; z-index: 2; width: 100%; left: 0; background-color: rgba(0,0,0,.5);" >
                 <div class="audio-player container">
-                    <div id="jquery_jplayer_audio_1" class="jp-jplayer" data-media-url="{{ episode.mediaUrl }}"></div>
+                    <div id="jquery_jplayer_audio_1" class="jp-jplayer" data-media-url="{{ flysystem_managed_asset_url(episode.player) }}"></div>
 
                     <div id="jp_container_audio_1" class="jp-flat-audio">
                         <div class="jp-play-control jp-control">
@@ -60,7 +60,7 @@
             /*url(https://www.transparenttextures.com/patterns/carbon-fibre.png),*/
                     url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
                     linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.25)),
-                    url({{ vich_uploader_asset(episode, 'backgroundImageFile') }});
+                    url({{ flysystem_managed_asset_url(episode.backgroundImage) }});
         }
     </style>
 

@@ -3,15 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Behat\Transliterator\Transliterator;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use App\FlysystemAssetManager\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\EpisodeRepository")
- * @Vich\Uploadable
  */
 class Episode
 {
@@ -125,39 +124,12 @@ class Episode
     private $backgroundImageUpdated;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     * @var \DateTime
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $pristineMediaUpdated;
+    private $pristineMediaUrl;
 
-    /**
-     * @Vich\UploadableField(mapping="episode_background_image", fileNameProperty="backgroundImageUrl")
-     * @var File
-     */
-    private $backgroundImageFile;
-
-    /**
-     * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @Vich\UploadableField(mapping="episode_pristine_media", fileNameProperty="pristineMedia.name", size="pristineMedia.size", mimeType="pristineMedia.mimeType", originalName="pristineMedia.originalName")
-     *
-     * @var File
-     */
-    private $pristineMediaFile;
-
-    /**
-     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     *
-     * @var EmbeddedFile
-     */
-    private $pristineMedia;
-
-    /**
-     * Episode constructor.
-     */
     public function __construct()
     {
-        $this->pristineMediaFile = new EmbeddedFile();
     }
 
     public function getId(): ?int
@@ -223,7 +195,7 @@ class Episode
         return $this->mediaUrl;
     }
 
-    public function setMediaUrl(string $mediaUrl): self
+    public function setMediaUrl(?string $mediaUrl = null): self
     {
         $this->mediaUrl = $mediaUrl;
 
@@ -266,6 +238,21 @@ class Episode
         return $this;
     }
 
+    static public function generateBackgroundImagePath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'background-image',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
+    }
+
     public function getBackgroundImageUrl(): ?string
     {
         return $this->backgroundImageUrl;
@@ -278,18 +265,37 @@ class Episode
         return $this;
     }
 
-    public function setBackgroundImageFile(File $image = null)
+    public function getBackgroundImage(): ?File
     {
-        $this->backgroundImageFile = $image;
-
-        if ($image) {
-            $this->backgroundImageUpdated = new \DateTime('now');
+        if (! $this->backgroundImageUrl) {
+            return null;
         }
+
+        return File::createFromUrl($this->backgroundImageUrl);
     }
 
-    public function getBackgroundImageFile(): ?File
+    public function getBackgroundImageUploadedFile(): ?File
     {
-        return $this->backgroundImageFile;
+        return $this->getBackgroundImage();
+    }
+
+    public function setBackgroundImageUploadedFile(UploadedFile $uploadedFile): self
+    {
+        $this->setBackgroundImage(new File(
+            'content',
+            self::generatePristineMediaPath($this, $uploadedFile->getClientOriginalName()),
+            $uploadedFile->getClientMimeType(),
+            $uploadedFile->getSize()
+        ));
+
+        return $this;
+    }
+
+    public function setBackgroundImage(?File $backgroundImage): self
+    {
+        $this->backgroundImageUrl = $backgroundImage? $backgroundImage->toUrl() : null;
+
+        return $this;
     }
 
     public function getBackgroundImageWidth(): ?int
@@ -391,7 +397,7 @@ class Episode
     /**
      * @return \DateTime
      */
-    public function getPublishedDate(): \DateTime
+    public function getPublishedDate(): ?\DateTime
     {
         return $this->publishedDate;
     }
@@ -399,65 +405,110 @@ class Episode
     /**
      * @param \DateTime $publishedDate
      */
-    public function setPublishedDate(\DateTime $publishedDate): void
+    public function setPublishedDate(\DateTime $publishedDate = null): void
     {
         $this->publishedDate = $publishedDate;
     }
 
-    public function getDownloadUrl(): string
+    public function getDownload(): ?File
     {
-        return $this->mediaUrl;
+        return $this->getMedia();
     }
 
-    public function getRssUrl(): string
+    public function getPlayer(): ?File
     {
-        return $this->mediaUrl;
+        return $this->getMedia();
     }
+
+    public function getRss(): ?File
+    {
+        return $this->getMedia();
+    }
+
 
     public function getBackgroundImageDirectory()
     {
         return $this->getGuid();
     }
 
-    public function getPristineMediaDirectory(): string
+    /**
+     * @return mixed
+     */
+    public function getPristineMediaUrl(): ?string
     {
-        return $this->getGuid();
+        return $this->pristineMediaUrl;
+    }
+
+    static public function generatePristineMediaPath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+            '',
+            'episodes',
+            Transliterator::transliterate($episode->getGuid()),
+            'pristine-media',
+            Transliterator::transliterate($fileNameWithoutExtension),
+        ]) . '.' . $extension;
     }
 
     /**
-     * @return File
+     * @param mixed $pristineMediaUrl
      */
-    public function getPristineMediaFile(): ?File
+    public function setPristineMediaUrl($pristineMediaUrl): self
     {
-        return $this->pristineMediaFile;
+        $this->pristineMediaUrl = $pristineMediaUrl;
+
+        return $this;
     }
 
-    /**
-     * @param File $pristineMediaFile
-     */
-    public function setPristineMediaFile(?File $pristineMediaFile = null): void
+    public function setPristineMedia(File $file): self
     {
-        $this->pristineMediaFile = $pristineMediaFile;
+        $this->pristineMediaUrl = $file->toUrl();
 
-        if (null !== $pristineMediaFile) {
-            $this->pristineMediaUpdated = new \DateTimeImmutable();
+        return $this;
+    }
+
+    public function getPristineMedia(): ?File
+    {
+        if (! $this->pristineMediaUrl) {
+            return null;
         }
+
+        return File::createFromUrl($this->pristineMediaUrl);
     }
 
-    /**
-     * @return EmbeddedFile
-     */
-    public function getPristineMedia(): ?EmbeddedFile
+    static public function generateMediaPath(Episode $episode, $fileName, $index = 0)
     {
-        return $this->pristineMedia;
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'media',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
     }
 
-    /**
-     * @param EmbeddedFile $pristineMedia
-     */
-    public function setPristineMedia(EmbeddedFile $pristineMedia): void
+    public function setMedia(File $file): self
     {
-        $this->pristineMedia = $pristineMedia;
+        $this->mediaUrl = $file->toUrl();
+
+        return $this;
+    }
+
+    public function getMedia(): ?File
+    {
+        if (! $this->mediaUrl) {
+            return null;
+        }
+
+        return File::createFromUrl($this->mediaUrl);
     }
 
     static private function convertHoursMinutesSecondsToSeconds($input): int

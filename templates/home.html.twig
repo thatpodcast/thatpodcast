@@ -42,7 +42,7 @@
                             <p class="flex">
                                 <span class="duration">{{ helpers.friendlyDuration(episode.duration) }}</span>
                                 <span class="size pl-2">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
-                                <span class="download pl-2"><a class="flex no-underline" href="{{ episode.downloadUrl }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-4 fill-current mr-1'}) }} download</a></span>
+                                <span class="download pl-2"><a class="flex no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-4 fill-current mr-1'}) }} download</a></span>
                             </p>
                         </div>
                     </article>

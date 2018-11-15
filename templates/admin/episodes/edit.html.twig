@@ -1,0 +1,106 @@
+{% extends 'admin/base.html.twig' %}
+{% import "helpers.html.twig" as helpers %}
+{% block body %}
+    <div class="container">
+        <div>{{ form_errors(form) }}</div>
+
+        {{ form_start(form) }}
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.number, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.number, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.number) }}
+            {{ form_errors(form.number) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.title, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.title, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.title) }}
+            {{ form_errors(form.title) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.subtitle, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.subtitle, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.subtitle) }}
+            {{ form_errors(form.subtitle) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.pristineMedia, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.pristineMedia, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.pristineMedia) }}
+            {{ form_errors(form.pristineMedia) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.publishedDate, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.publishedDate, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.publishedDate) }}
+            {{ form_errors(form.publishedDate) }}
+        </div>
+
+        <h2>Background Image</h2>
+        {% if episode.backgroundImage %}
+            <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.backgroundImage) }}">
+        {% endif %}
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.backgroundImageCreditBy, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.backgroundImageCreditBy, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.backgroundImageCreditBy) }}
+            {{ form_errors(form.backgroundImageCreditBy) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.backgroundImageCreditDescription, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.backgroundImageCreditDescription, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.backgroundImageCreditDescription) }}
+            {{ form_errors(form.backgroundImageCreditDescription) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.backgroundImageCreditUrl, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.backgroundImageCreditUrl, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.backgroundImageCreditUrl) }}
+            {{ form_errors(form.backgroundImageCreditUrl) }}
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.backgroundImage, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.backgroundImage, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.backgroundImage) }}
+            {{ form_errors(form.backgroundImage) }}
+        </div>
+
+        <h2>Content</h2>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.contentHtml, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.contentHtml, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.contentHtml) }}
+            {{ form_errors(form.contentHtml) }}
+            <trix-editor input="{{ form.contentHtml.vars.id }}"></trix-editor>
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.itunesSummaryHtml, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.itunesSummaryHtml, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.itunesSummaryHtml) }}
+            {{ form_errors(form.itunesSummaryHtml) }}
+            <trix-editor input="{{ form.itunesSummaryHtml.vars.id }}"></trix-editor>
+        </div>
+
+        <div class="max-w-sm my-4">
+            {{ form_label(form.transcriptHtml, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.transcriptHtml, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.transcriptHtml) }}
+            {{ form_errors(form.transcriptHtml) }}
+        </div>
+
+        <button class="rounded bg-green py-2 px-4 my-2" type="submit">Save Changes</button>
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}

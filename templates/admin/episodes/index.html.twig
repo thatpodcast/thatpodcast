@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+{% import "helpers.html.twig" as helpers %}
+{% block body %}
+    <div class="container">
+        <ul class="list-reset pb-4">
+            <li>
+                <a class="border-2 border-green bg-green-lighter rounded py-2 px-4 inline-block no-underline text-green-darkest" href="{{ path('admin_episodes_create') }}">Create</a>
+            </li>
+        </ul>
+        <ul class="list-reset">
+            {% for episode in episodes|reverse %}
+                <li class="py-4 {% if not loop.first %} border-t-2 {% endif %} border-grey">
+                    <article>
+                        <header>
+                            <h1><a class="no-underline text-black text-base" href="{{ path('admin_episodes_show', {id: episode.id}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
+                        </header>
+
+                        {% if episode.backgroundImage %}
+                            <div>
+                                <a class="" href="{{ path('admin_episodes_show', {id: episode.id}) }}">
+                                    <img class="max-w-xs" src="{{ flysystem_managed_asset_url(episode.backgroundImage) }}">
+                                </a>
+                            </div>
+                        {% endif %}
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
