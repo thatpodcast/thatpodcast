@@ -12,8 +12,7 @@ parameters:
 services:
     flysystem.s3.client:
         class: Aws\S3\S3Client
-        factory_class: Aws\S3\S3Client
-        factory_method: factory
+        factory: [Aws\S3\S3Client, 'factory']
         arguments:
             -
                 key: "%flysystem.s3.key%"
