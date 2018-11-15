@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-exif": "*",
         "ext-iconv": "*",
+        "ext-imagick": "*",
         "api-platform/api-pack": "^1.1",
         "aws/aws-sdk-php": "^3.71",
         "behat/transliterator": "^1.2",
