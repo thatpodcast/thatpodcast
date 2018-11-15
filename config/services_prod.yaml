@@ -19,3 +19,4 @@ services:
                 secret: "%flysystem.s3.secret%"
                 signature: "v4"
                 region: "%flysystem.s3.region%"
+                version: "2006-03-01"
