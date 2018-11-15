@@ -9,6 +9,7 @@ use App\Form\Admin\EpisodeType;
 use App\Form\CommandObject\Admin\EpisodeDto;
 use App\Messages\Commands\ProcessPristineMedia;
 use App\Repository\EpisodeRepository;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -117,7 +118,7 @@ class EpisodesController extends AbstractController
     /**
      * @Route("/admin/episodes/{id}/edit", name="admin_episodes_edit", requirements={"id"="\d+"})
      */
-    public function edit(Request $request, Episode $episode, FlysystemAssetManager $flysystemAssetManager, MessageBusInterface $commandBus)
+    public function edit(Request $request, Episode $episode, FlysystemAssetManager $flysystemAssetManager, MessageBusInterface $commandBus, LoggerInterface $logger)
     {
         $episodeDto = new EpisodeDto();
 
@@ -147,9 +148,15 @@ class EpisodesController extends AbstractController
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
             $episode->setPublishedDate($episodeDto->publishedDate);
 
-            if ($episodeDto->backgroundImage) {
+            if ($episodeDto->backgroundImage && $episodeDto->backgroundImage->isValid()) {
                 /** @var UploadedFile $uploadedFile */
                 $uploadedFile = $episodeDto->backgroundImage;
+
+                $logger->notice('Real Path' . $uploadedFile->getRealPath());
+                $tmpFile = tempnam(sys_get_temp_dir(), 'form-upload');
+                $uploadedFile->move(dirname($tmpFile), basename($tmpFile));
+
+                $logger->notice('Temp File' . $tmpFile);
 
                 $file = new File(
                     'content',
@@ -159,7 +166,7 @@ class EpisodesController extends AbstractController
                 );
 
                 $episode->setBackgroundImage($file);
-                $dimensions = getimagesize($uploadedFile->getRealPath());
+                $dimensions = getimagesize($tmpFile);
 
                 if ($dimensions) {
                     list ($width, $height) = $dimensions;
@@ -168,7 +175,7 @@ class EpisodesController extends AbstractController
                     $episode->setBackgroundImageHeight($height);
                 }
 
-                $flysystemAssetManager->writeFromFile($file, $uploadedFile->getRealPath());
+                $flysystemAssetManager->writeFromFile($file, $tmpFile);
             }
 
             if ($episodeDto->pristineMedia) {
