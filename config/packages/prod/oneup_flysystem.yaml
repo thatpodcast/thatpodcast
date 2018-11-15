@@ -2,7 +2,7 @@
 oneup_flysystem:
     adapters:
         content:
-            awss3v2:
+            awss3v3:
                 client: flysystem.s3.client
                 bucket: '%flysystem.s3.bucket%'
                 prefix: ~
