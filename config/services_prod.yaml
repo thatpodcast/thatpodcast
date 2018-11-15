@@ -15,8 +15,9 @@ services:
         factory: [Aws\S3\S3Client, 'factory']
         arguments:
             -
-                key: "%flysystem.s3.key%"
-                secret: "%flysystem.s3.secret%"
+                credentials:
+                    key: "%flysystem.s3.key%"
+                    secret: "%flysystem.s3.secret%"
                 signature: "v4"
                 region: "%flysystem.s3.region%"
                 version: "2006-03-01"
