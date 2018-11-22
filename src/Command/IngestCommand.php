@@ -184,7 +184,7 @@ class IngestCommand extends Command
                     )
                 ));
 
-                $reponse = $client->get($existingEpisode->getBackgroundImageUrl());
+                $response = $client->get($existingEpisode->getBackgroundImageUrl());
                 fclose($handle);
 
                 $backgroundImageFile = new File(
