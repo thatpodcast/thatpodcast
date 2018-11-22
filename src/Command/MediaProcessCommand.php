@@ -29,7 +29,6 @@ class MediaProcessCommand extends Command
         $this->commandBus = $commandBus;
     }
 
-
     protected function configure()
     {
         $this
