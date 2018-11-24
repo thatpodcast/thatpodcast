@@ -58,6 +58,10 @@ services:
     Cocur\Slugify\SlugifyInterface:
         alias: Cocur\Slugify\Slugify
 
+    Imagine\Imagick\Imagine: ~
+    Imagine\Image\ImagineInterface:
+        alias: Imagine\Imagick\Imagine
+
     Vich\UploaderBundle\Adapter\AdapterInterface:
         alias: vich_uploader.adapter.orm
 

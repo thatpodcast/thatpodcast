@@ -12,6 +12,7 @@
         "behat/transliterator": "^1.2",
         "cocur/slugify": "^3.1",
         "guzzlehttp/guzzle": "^6.3",
+        "imagine/imagine": "^1.1",
         "james-heinrich/getid3": "^1.9",
         "league/flysystem": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",

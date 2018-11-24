@@ -480,7 +480,7 @@ class Episode
         return File::createFromUrl($this->pristineMediaUrl);
     }
 
-    static public function generateMediaPath(Episode $episode, $fileName, $index = 0)
+    static public function generateMediaPath(Episode $episode, $fileName)
     {
         preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
 

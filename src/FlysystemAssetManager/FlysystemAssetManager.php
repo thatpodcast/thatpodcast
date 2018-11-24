@@ -9,11 +9,6 @@ class FlysystemAssetManager
     private $urlMapping = [];
     private $filesystemMapping = [];
 
-    /**
-     * FlysystemAssetManager constructor.
-     * @param array $urlMapping
-     * @param array $filesystemMapping
-     */
     public function __construct(array $urlMapping, array $filesystemMapping)
     {
         $this->urlMapping = $urlMapping;
@@ -30,7 +25,10 @@ class FlysystemAssetManager
 
     public function writeFromStream(File $file, $stream)
     {
-        //
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->filesystemMapping[$file->getFilesystem()];
+
+        $filesystem->writeStream($file->getPath(), $stream);
     }
 
     public function getStream(File $file)
@@ -39,6 +37,20 @@ class FlysystemAssetManager
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
         return $filesystem->readStream($file->getPath());
+    }
+
+    public function getTemporaryLocalFileName(File $file): string
+    {
+        $temporaryLocalFileName = tempnam(sys_get_temp_dir(), 'flysystem-asset-manager-');
+        $targetStream = fopen($temporaryLocalFileName, 'w');
+
+        $sourceStream = $this->getStream($file);
+
+        if (false === stream_copy_to_stream($sourceStream, $targetStream)) {
+            throw new \RuntimeException('Could not copy stream to ' . $temporaryLocalFileName);
+        }
+
+        return $temporaryLocalFileName;
     }
 
     public function exists(File $file)

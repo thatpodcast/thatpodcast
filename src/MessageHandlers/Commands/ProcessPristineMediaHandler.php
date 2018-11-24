@@ -2,11 +2,14 @@
 
 namespace App\MessageHandlers\Commands;
 
+use App\Card\CardBuilder;
+use App\Card\CardConfiguration;
 use App\Entity\Episode;
 use App\FlysystemAssetManager\File;
 use App\FlysystemAssetManager\FlysystemAssetManager;
 use App\Messages\Commands\ProcessPristineMedia;
 use App\Repository\EpisodeRepository;
+use Cocur\Slugify\SlugifyInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use getID3;
 use getid3_writetags;
@@ -34,18 +37,29 @@ class ProcessPristineMediaHandler
     private $objectManager;
 
     /**
-     * ProcessPristineMediaHandler constructor.
-     * @param string $projectDir
-     * @param EpisodeRepository $episodeRepository
-     * @param FlysystemAssetManager $flysystemAssetManager
-     * @param ObjectManager $objectManager
+     * @var CardBuilder
      */
-    public function __construct($projectDir, EpisodeRepository $episodeRepository, FlysystemAssetManager $flysystemAssetManager, ObjectManager $objectManager)
-    {
+    private $cardBuilder;
+
+    /**
+     * @var SlugifyInterface
+     */
+    private $slugify;
+
+    public function __construct(
+        $projectDir,
+        EpisodeRepository $episodeRepository,
+        FlysystemAssetManager $flysystemAssetManager,
+        ObjectManager $objectManager,
+        CardBuilder $cardBuilder,
+        SlugifyInterface $slugify
+    ) {
         $this->projectDir = $projectDir;
         $this->episodeRepository = $episodeRepository;
         $this->flysystemAssetManager = $flysystemAssetManager;
         $this->objectManager = $objectManager;
+        $this->cardBuilder = $cardBuilder;
+        $this->slugify = $slugify;
     }
 
     public function __invoke(ProcessPristineMedia $command)
@@ -54,15 +68,17 @@ class ProcessPristineMediaHandler
 
         $episode = $this->episodeRepository->find($command->episodeId);
 
-        $pristineTmpFile = tempnam(sys_get_temp_dir(), 'pristine-media-download');
-        $pristineTargetStream = fopen($pristineTmpFile, 'w');
-
-        $pristineSourceStream = $this->flysystemAssetManager->getStream($episode->getPristineMedia());
-
-        if (false === stream_copy_to_stream($pristineSourceStream, $pristineTargetStream)) {
-            print "could not copy stream...\n";
+        if (! $episode) {
             return;
         }
+
+        $pristineTmpFile = $this->flysystemAssetManager->getTemporaryLocalFileName($episode->getPristineMedia());
+
+        $targetFileName = $this->slugify->slugify(implode(' ', [
+            'That Podcast Episode',
+            $episode->getNumber(),
+            $episode->getTitle()
+        ])) . '.mp3';
 
         $tagwriter = new getid3_writetags();
         $tagwriter->filename = $pristineTmpFile;
@@ -77,15 +93,58 @@ class ProcessPristineMediaHandler
         $tagData['genre'][] = 'Podcast';
         $tagData['subtitle'][] = $episode->getItunesSummaryHtml();
 
-        $coverPhotoFileName = $this->projectDir.'/assets/images/that-podcast-cover-photo.jpg';
-        $coverPhotoData = file_get_contents($coverPhotoFileName);
-        $coverPhotoExifImageType = \exif_imagetype($coverPhotoFileName);
+        $cardConfiguration = CardConfiguration::createItunesCard()
+            ->withDefaultFonts($this->projectDir)
+            ->withDefaultLogo($this->projectDir)
+            ;
+
+        if ($episode->getBackgroundImageUrl()) {
+            $backgroundImageTmpFile = $this->flysystemAssetManager->getTemporaryLocalFileName($episode->getBackgroundImage());
+
+            $cardConfiguration = $cardConfiguration
+                ->withBackgroundFileName($backgroundImageTmpFile)
+                ;
+        }
+
+        if ($episode->getPublishedDate()) {
+            $cardConfiguration = $cardConfiguration
+                ->withDate($episode->getPublishedDate()->format('F jS, Y'))
+            ;
+        }
+
+        if ($episode->getNumber()) {
+            $cardConfiguration = $cardConfiguration
+                ->withNumber($episode->getNumber())
+                ;
+        }
+
+        if ($episode->getTitle()) {
+            $cardConfiguration = $cardConfiguration
+                ->withTitle($episode->getTitle())
+            ;
+        }
+
+        if ($episode->getSubtitle()) {
+            $cardConfiguration = $cardConfiguration
+                ->withSubtitle($episode->getSubtitle());
+            ;
+        }
+
+        $itunesCardFileName =  tempnam(sys_get_temp_dir(), 'episode-itunes-photo-') .'.jpg';
+
+        $itunesCardImage = $this->cardBuilder->buildCard($cardConfiguration);
+
+        $itunesCardImage->save($itunesCardFileName, ['jpeg_quality' => 60]);
+
+        $itunesCardImageExifImageType = \exif_imagetype($itunesCardFileName);
         $tagData['attached_picture'][] = [
-            'data' => $coverPhotoData,
-            'picturetypeid' => $coverPhotoExifImageType,
-            'description' => basename($coverPhotoFileName),
-            'mime' => image_type_to_mime_type($coverPhotoExifImageType),
+            'data' => file_get_contents($itunesCardFileName),
+            'picturetypeid' => $itunesCardImageExifImageType,
+            'description' => 'that-podcast-cover-photo.jpg',
+            'mime' => image_type_to_mime_type($itunesCardImageExifImageType),
         ];
+
+        unlink($itunesCardFileName);
 
         $tagwriter->tag_data = $tagData;
         if (! $tagwriter->WriteTags()) {
@@ -95,7 +154,7 @@ class ProcessPristineMediaHandler
 
         $mediaFile = new File(
             'content',
-            Episode::generateMediaPath($episode, basename($episode->getPristineMedia()->getPath())),
+            Episode::generateMediaPath($episode, $targetFileName),
             $episode->getPristineMedia()->getContentType(),
             filesize($pristineTmpFile)
         );
@@ -111,16 +170,6 @@ class ProcessPristineMediaHandler
         $this->objectManager->flush();
         $this->objectManager->clear();
 
-
-        /*
-        $id3 = $getID3->analyze($pristineTmpFile);
-        print_r($id3);
-        */
-
-        // download pristine media
-        // get episode meta data (from repository)
-        // write meta data to mp3
-        // upload media
-        // write new media to episode
+        unlink($pristineTmpFile);
     }
 }

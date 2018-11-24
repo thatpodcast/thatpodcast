@@ -193,6 +193,10 @@ class EpisodesController extends AbstractController
 
                 $episode->setPristineMedia($file);
 
+                if ($flysystemAssetManager->exists($file)) {
+                    $flysystemAssetManager->delete($file);
+                }
+
                 $flysystemAssetManager->writeFromFile($file, $uploadedFile->getRealPath());
 
                 // TODO: Move to Doctrine Lifecycle Handler
