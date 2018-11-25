@@ -67,7 +67,7 @@ class IngestCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $force = $input->getOption('force');
 
-        $allExportedEpisodes = collect($this->episodes->getAll())->slice(0, 12);
+        $allExportedEpisodes = collect($this->episodes->getAll())->reverse();
 
         $allExportedEpisodes->each(function (Episode $exportedEpisode) use ($io, $force) {
             $existingEpisode = $this->episodeRepository->findOneByGuid($exportedEpisode->getGuid());
