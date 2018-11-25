@@ -30,6 +30,18 @@ class EpisodeRepository extends ServiceEntityRepository
 
     }
 
+    public function findAllPublishedSorted()
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.published <= CURRENT_TIMESTAMP()')
+            ->orderBy('e.numberForSort', 'ASC')
+            ->setMaxResults(1000)
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
     public function findOneByGuid($guid): ?Episode
     {
         return $this->createQueryBuilder('e')

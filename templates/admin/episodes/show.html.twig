@@ -12,7 +12,7 @@
                 <span class='month'>{{ episode.published|date('M', episode.publishedTimeZone) }}</span> <span class='day'>{{ episode.published|date('jS', episode.publishedTimeZone) }}</span> <span class='year'>{{ episode.published|date('Y', episode.publishedTimeZone) }}</span> <span class='time-zone'>{{ episode.published|date('e', episode.publishedTimeZone) }}</span>
             </time>
             <header>
-                <h1><a class="no-underline text-black" href="{{ path('admin_episodes_show', {id: episode.id}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
+                <h1><a class="no-underline text-black" href="{{ path('episode', {path: episode.path}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
                 <h2 class="text-grey-darker font-normal py-2 xl:text-lg">{{ episode.subtitle }}</h2>
             </header>
 

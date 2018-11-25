@@ -48,9 +48,11 @@
             {% for episode in episodes|reverse %}
                 <li class="py-16 {% if not loop.first %} border-t-2 {% endif %} border-grey">
                     <article>
-                        <time class="" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
-                            <span class='month'>{{ episode.publishedDate|date('M') }}</span> <span class='day'>{{ episode.publishedDate|date('jS') }}</span> <span class='year'>{{ episode.publishedDate|date('Y') }}</span> <span class='time-zone'>{{ episode.publishedDate|date('e') }}</span>
-                        </time>
+                        {% if episode.published %}
+                            <time class="" datetime="{{ episode.published|date('c') }}" pubdate>
+                                <span class='month'>{{ episode.published|date('M') }}</span> <span class='day'>{{ episode.published|date('jS') }}</span> <span class='year'>{{ episode.published|date('Y') }}</span> <span class='time-zone'>{{ episode.published|date('e') }}</span>
+                            </time>
+                        {% endif %}
                         <header>
                             <h1><a class="no-underline text-black" href="{{ path('episode', {path: episode.path}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
                             <h2 class="text-grey-darker font-normal py-2 xl:text-lg">{{ episode.subtitle }}</h2>
