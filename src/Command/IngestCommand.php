@@ -178,6 +178,7 @@ class IngestCommand extends Command
             $existingEpisode->setDuration(null);
 
             $this->objectManager->flush();
+            $this->objectManager->clear();
         });
     }
 }
