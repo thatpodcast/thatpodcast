@@ -1,6 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}That Podcast!{% endblock %}
+{% block title %}That Podcast with Beau and Dave{% endblock %}
+
+{% block metas %}
+    <meta name="description" content="Beau Simensen and Dave Marshall talking about life as dads, programmers, and entrepreneurs." />
+    <meta name="keywords" content="beau, beau simensen, dave, dave marshall, podcast, that podcast" />
+
+    <!-- Facebook -->
+    <meta property="og:title" content="That Podcast" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="{{ absolute_url(asset('build/images/that-podcast-cover-photo.jpg')) }}" />
+    <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" />
+    <meta property="og:description" content="Beau Simensen and Dave Marshall talking about life as dads, programmers, and entrepreneurs." />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="That Podcast" />
+    <meta name="twitter:description" content="@beausimensen and @davedevelopment talking about life as dads, programmers, and entrepreneurs." />
+    <meta name="twitter:image" content="{{ absolute_url(asset('build/images/that-podcast-cover-photo.jpg')) }}" />
+{% endblock %}
+
 {% import "helpers.html.twig" as helpers %}
 {% block hero %}
 

@@ -21,7 +21,7 @@
             <itunes:email>hello@thatpodcast.io</itunes:email>
         </itunes:owner>
         <itunes:explicit>no</itunes:explicit>
-        <itunes:image href="http://thatpodcast.io/assets/images/thatpodcast-cover.jpg"/>
+        <itunes:image href="{{ absolute_url(asset('build/images/that-podcast-cover-photo.jpg')) }}"/>
         {% for episode in episodes|reverse %}
             <item>
                 <title>Episode {{ episode.number }}: {{ episode.title }}</title>
@@ -33,7 +33,9 @@
                 <itunes:summary>
                     <![CDATA[{{ episode.itunesSummaryHtml|raw }}]]>
                 </itunes:summary>
-                <itunes:image href="http://thatpodcast.io/assets/images/thatpodcast-cover.jpg"/>
+                {% if episode.itunesCard %}
+                    <itunes:image href="{{ flysystem_managed_asset_url(episode.itunesCard) }}"/>
+                {% endif %}
                 <enclosure url="{{ flysystem_managed_asset_url(episode.rss) }}" length="{{ episode.fileSize }}" type="audio/mp3"/>
                 <guid>{{ episode.guid }}</guid>
                 <pubDate>{{ episode.publishedDate|date("D, d M Y H:i:s O", "Etc/UTC") }}</pubDate>

@@ -8,6 +8,22 @@ body {
     color: $primary-color;
 }
 
+body {
+    article {
+        p {
+            @apply font-normal;
+            @apply leading-normal;
+            @apply py-2;
+        }
+    }
+
+    p.transcript {
+        @apply font-normal;
+        @apply leading-normal;
+        @apply py-2;
+    }
+}
+
 #hero-and-nav {
     background-size: auto,auto,cover;
     background-position: 50%,50%,50%;
