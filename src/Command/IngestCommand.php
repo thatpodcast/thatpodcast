@@ -175,8 +175,6 @@ class IngestCommand extends Command
                 unlink($tmpFile);
             }
 
-            $existingEpisode->setDuration(null);
-
             $this->objectManager->flush();
             $this->objectManager->clear();
         });

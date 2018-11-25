@@ -20,7 +20,13 @@ class FlysystemAssetManager
         /** @var Filesystem $filesystem */
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
-        return $filesystem->write($file->getPath(), file_get_contents($localPath));
+        $stream = fopen($localPath, 'r');
+
+        $rv = $filesystem->writeStream($file->getPath(), $stream);
+
+        fclose($stream);
+
+        return $rv;
     }
 
     public function writeFromStream(File $file, $stream)
