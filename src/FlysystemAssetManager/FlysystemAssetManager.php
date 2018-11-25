@@ -20,7 +20,7 @@ class FlysystemAssetManager
         /** @var Filesystem $filesystem */
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
-        $filesystem->write($file->getPath(), file_get_contents($localPath));
+        return $filesystem->write($file->getPath(), file_get_contents($localPath));
     }
 
     public function writeFromStream(File $file, $stream)
@@ -28,7 +28,41 @@ class FlysystemAssetManager
         /** @var Filesystem $filesystem */
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
-        $filesystem->writeStream($file->getPath(), $stream);
+        return $filesystem->writeStream($file->getPath(), $stream);
+    }
+
+    public function updateFromFile(File $file, $localPath)
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->filesystemMapping[$file->getFilesystem()];
+
+        return $filesystem->update($file->getPath(), file_get_contents($localPath));
+    }
+
+    public function updateFromStream(File $file, $stream)
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->filesystemMapping[$file->getFilesystem()];
+
+        return $filesystem->updateStream($file->getPath(), $stream);
+    }
+
+    public function writeOrUpdateFromFile(File $file, $localPath)
+    {
+        if ($this->exists($file)) {
+            return $this->updateFromFile($file, $localPath);
+        }
+
+        return $this->writeFromFile($file, $localPath);
+    }
+
+    public function writeOrUpdateFromStream(File $file, $stream)
+    {
+        if ($this->exists($file)) {
+            return $this->updateFromStream($file, $stream);
+        }
+
+        return $this->writeFromStream($file, $stream);
     }
 
     public function getStream(File $file)
@@ -37,6 +71,20 @@ class FlysystemAssetManager
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
         return $filesystem->readStream($file->getPath());
+    }
+
+    public function doWithTemporaryLocalFile(File $file, $cb = null)
+    {
+        if (! $cb) {
+            return;
+        }
+
+        $temporaryLocalFileName = $this->getTemporaryLocalFileName($file);
+
+        /** @var $cb callable */
+        $cb($temporaryLocalFileName);
+
+        unlink($temporaryLocalFileName);
     }
 
     public function getTemporaryLocalFileName(File $file): string
@@ -72,11 +120,15 @@ class FlysystemAssetManager
         /** @var Filesystem $filesystem */
         $filesystem = $this->filesystemMapping[$file->getFilesystem()];
 
-        $filesystem->delete($file->getPath());
+        return $filesystem->delete($file->getPath());
     }
 
     public function getUrl(File $file)
     {
+        if ($file->isNotManaged()) {
+            return $file->toUrl();
+        }
+
         $prefix = $this->urlMapping[$file->getFilesystem()];
 
         return $prefix . $file->getPath();

@@ -194,6 +194,9 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
+    "sllh/doctrine-dbal-utc-datetime": {
+        "version": "v1.0.0"
+    },
     "symfony/amqp-pack": {
         "version": "v1.0.11"
     },

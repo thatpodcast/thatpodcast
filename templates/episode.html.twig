@@ -1,7 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ episode.title }} • That Podcast{% endblock %}
+{% block title %}Episode {{ episode.number }}: {{ episode.title }} • That Podcast{% endblock %}
 {% import "helpers.html.twig" as helpers %}
+
+{% block metas %}
+    <meta name="description" content="{{ episode.subtitle }}">
+
+    <!-- Facebook -->
+    <meta property="og:title" content="Episode {{ episode.number }}: {{ episode.title }}" />
+
+    {% if episode.facebookCard %}
+        <meta property="og:image" content="{{ flysystem_managed_asset_url(episode.facebookCard) }}" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="628" />
+    {% endif %}
+
+    <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" />
+    <meta property="og:description" content="{{ episode.subtitle }}" />
+    <meta property="og:site_name" content="That Podcast" />
+
+    <meta property="og:type" content="article" />
+    <meta property="article:publisher" content="https://www.facebook.com/ThatPodcastIo" />
+    <meta property="article:author" content="https://www.facebook.com/simensen" />
+    <meta property="article:author" content="https://www.facebook.com/davedevelopment" />
+
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Episode {{ episode.number }}: {{ episode.title }}" />
+    <meta name="twitter:description" content="{{ episode.subtitle }}" />
+    <meta name="twitter:image" content="{{ flysystem_managed_asset_url(episode.twitterCard) }}" />
+    <meta name="twitter:image:src" content="{{ flysystem_managed_asset_url(episode.twitterCard) }}" />
+    <meta name="twitter:site" content="@thatpodcast" />
+    <meta name="twitter:creator" content="@thatpodcast" />
+    <meta name="twitter:url" content="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" />
+    <meta name="twitter:label1" value="Published" />
+    <meta name="twitter:data1" value="{{ episode.published|date('M jS Y') }}" />
+    <meta name="twitter:label2" value="Duration" />
+    <meta name="twitter:data2" value="{{ episode.duration }}" />
+{% endblock %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="/jplayer/flat.audio/flat.audio.css">

@@ -20,6 +20,7 @@
         "oneup/flysystem-bundle": "^3.0",
         "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.2",
+        "sllh/doctrine-dbal-utc-datetime": "^1.0",
         "symfony/amqp-pack": "^1.0",
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "233d656e3b4992c5bb8aafc7f8f19528",
+    "content-hash": "1a376a665dbf6a8f3a65bd540cc9a782",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -3087,6 +3087,52 @@
                 "controllers"
             ],
             "time": "2018-05-12T09:37:42+00:00"
+        },
+        {
+            "name": "sllh/doctrine-dbal-utc-datetime",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Soullivaneuh/doctrine-dbal-utc-datetime.git",
+                "reference": "7fabe34e104b62f46b9f9582faa178c109c29dd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Soullivaneuh/doctrine-dbal-utc-datetime/zipball/7fabe34e104b62f46b9f9582faa178c109c29dd6",
+                "reference": "7fabe34e104b62f46b9f9582faa178c109c29dd6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.6",
+                "php": "^7.1"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "For Symfony integration of the DBAL type"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SLLH\\Doctrine\\DBAL\\Types\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sullivan SENECHAL",
+                    "email": "soullivaneuh@gmail.com"
+                }
+            ],
+            "description": "UTC DateTime type for Doctrine DBAL",
+            "keywords": [
+                "datetime",
+                "dbal",
+                "doctrine",
+                "utc"
+            ],
+            "time": "2017-09-25T19:52:09+00:00"
         },
         {
             "name": "symfony/amqp-pack",

@@ -7,6 +7,11 @@ class File
     /**
      * @var string
      */
+    private $scheme;
+
+    /**
+     * @var string
+     */
     private $filesystem;
 
     /**
@@ -25,18 +30,12 @@ class File
     private $contentLength;
 
     /**
-     * File constructor.
-     * @param string $filesystem
-     * @param string $path
-     * @param string $contentType
-     * @param int $contentLength
+     * @var string
      */
-    public function __construct(string $filesystem, string $path, string $contentType, int $contentLength)
+    private $rawUrl;
+
+    private function __construct()
     {
-        $this->filesystem = $filesystem;
-        $this->path = strpos($path, '/') === 0 ? $path : '/'.$path;
-        $this->contentType = $contentType;
-        $this->contentLength = $contentLength;
     }
 
     /**
@@ -71,23 +70,43 @@ class File
         return $this->contentLength;
     }
 
-    /**
-     * @param string $url
-     * @return static
-     */
-    static public function createFromUrl(string $url)
+    public function isManaged()
+    {
+        return 'flysystem' === $this->scheme;
+    }
+
+    public function isNotManaged()
+    {
+        return 'flysystem' !== $this->scheme;
+    }
+
+    static public function create(string $filesystem, string $path, string $contentType = null, int $contentLength = null): File
+    {
+        $file = new static();
+        $file->scheme = 'flysystem';
+        $file->filesystem = $filesystem;
+        $file->path = strpos($path, '/') === 0 ? $path : '/'.$path;
+        $file->contentType = $contentType;
+        $file->contentLength = $contentLength;
+
+        return $file;
+    }
+
+    static public function createFromUrl(string $url): File
     {
         $scheme = parse_url($url, PHP_URL_SCHEME);
+
         if ('flysystem' !== $scheme) {
-            throw new \InvalidArgumentException(sprintf(
-                'The scheme "%s" is not supported; must be "flysystem"',
-                $scheme
-            ));
+            $file = new static();
+            $file->scheme = $scheme;
+            $file->rawUrl = $url;
+
+            return $file;
         }
 
         parse_str( parse_url( $url, PHP_URL_QUERY ), $query );
 
-        return new static(
+        return static::create(
             parse_url($url, PHP_URL_HOST),
             parse_url($url, PHP_URL_PATH),
             $query['content-type'],
@@ -97,6 +116,10 @@ class File
 
     public function toUrl(): string
     {
+        if ($this->isNotManaged()) {
+            return $this->rawUrl;
+        }
+
         return sprintf(
             'flysystem://%s%s?content-type=%s&content-length=%d',
             $this->filesystem,

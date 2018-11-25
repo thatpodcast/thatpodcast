@@ -112,10 +112,16 @@ class Episode
     private $transcriptHtml;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="utcdatetime", nullable=true)
      * @var \DateTime
      */
-    private $publishedDate;
+    private $published;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var \DateTimeZone
+     */
+    private $publishedTimeZone;
 
     /**
      * @ORM\Column(type="date", nullable=true)
@@ -127,6 +133,32 @@ class Episode
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $pristineMediaUrl;
+
+    /**
+     * @ORM\Column(type="utcdatetime", nullable=true)
+     * @var \DateTime
+     */
+    private $pristineMediaUrlUpdated;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $itunesCardUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $twitterCardUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $facebookCardUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hdCardUrl;
 
     public function __construct()
     {
@@ -261,6 +293,7 @@ class Episode
     public function setBackgroundImageUrl(?string $backgroundImageUrl): self
     {
         $this->backgroundImageUrl = $backgroundImageUrl;
+        $this->backgroundImageUpdated = new \DateTime('now', new \DateTimeZone('UTC'));
 
         return $this;
     }
@@ -293,9 +326,7 @@ class Episode
 
     public function setBackgroundImage(?File $backgroundImage): self
     {
-        $this->backgroundImageUrl = $backgroundImage? $backgroundImage->toUrl() : null;
-
-        return $this;
+        return $this->setBackgroundImageUrl($backgroundImage ? $backgroundImage->toUrl() : null);
     }
 
     public function getBackgroundImageWidth(): ?int
@@ -396,19 +427,72 @@ class Episode
 
     /**
      * @return \DateTime
+     * @deprecated
      */
     public function getPublishedDate(): ?\DateTime
     {
-        return $this->publishedDate;
+        return $this->published;
     }
 
     /**
      * @param \DateTime $publishedDate
+     * @deprecated
      */
     public function setPublishedDate(\DateTime $publishedDate = null): void
     {
-        $this->publishedDate = $publishedDate;
+        $this->setPublished($publishedDate);
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPublished(): ?\DateTime
+    {
+        return $this->published;
+    }
+
+    public function setPublished(\DateTime $published = null): void
+    {
+        if (! $published) {
+            $this->published = null;
+            $this->publishedTimeZone = null;
+
+            return;
+        }
+
+        $this->publishedTimeZone = $published->getTimezone()->getName();
+
+        $utcPublished = clone($published);
+        $utcPublished->setTimezone(new \DateTimeZone('UTC'));
+
+        $this->published = $utcPublished;
+    }
+
+    public function getLocalPublished(): ?\DateTime
+    {
+        if (! $this->published) {
+            return null;
+        }
+
+        if (! $this->publishedTimeZone) {
+            return clone($this->published);
+        }
+
+        $localPublished = clone($this->published);
+        $localPublished->setTimezone($this->getPublishedTimeZone());
+
+        return $localPublished;
+    }
+
+    /**
+     * @return \DateTimeZone
+     */
+    public function getPublishedTimeZone(): ?\DateTimeZone
+    {
+        return new \DateTimeZone($this->publishedTimeZone ?? 'UTC');
+    }
+
+
 
     public function getDownload(): ?File
     {
@@ -424,7 +508,6 @@ class Episode
     {
         return $this->getMedia();
     }
-
 
     public function getBackgroundImageDirectory()
     {
@@ -460,13 +543,14 @@ class Episode
     public function setPristineMediaUrl($pristineMediaUrl): self
     {
         $this->pristineMediaUrl = $pristineMediaUrl;
+        $this->pristineMediaUrlUpdated = new \DateTime('now', new \DateTimeZone('UTC'));
 
         return $this;
     }
 
     public function setPristineMedia(File $file): self
     {
-        $this->pristineMediaUrl = $file->toUrl();
+        $this->setPristineMediaUrl($file->toUrl());
 
         return $this;
     }
@@ -511,6 +595,180 @@ class Episode
         return File::createFromUrl($this->mediaUrl);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getItunesCardUrl()
+    {
+        return $this->itunesCardUrl;
+    }
+
+    /**
+     * @param mixed $itunesCardUrl
+     */
+    public function setItunesCardUrl($itunesCardUrl): void
+    {
+        $this->itunesCardUrl = $itunesCardUrl;
+    }
+
+    public function getItunesCard(): ?File
+    {
+        if (! $this->itunesCardUrl) {
+            return null;
+        }
+
+        return File::createFromUrl($this->itunesCardUrl);
+    }
+
+    public function setItunesCard(?File $file): void
+    {
+        $this->setItunesCardUrl($file ? $file->toUrl() : null);
+    }
+
+    static public function generateItunesCardPath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'itunes-card',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTwitterCardUrl()
+    {
+        return $this->twitterCardUrl;
+    }
+
+    /**
+     * @param mixed $twitterCardUrl
+     */
+    public function setTwitterCardUrl($twitterCardUrl): void
+    {
+        $this->twitterCardUrl = $twitterCardUrl;
+    }
+
+    public function getTwitterCard(): ?File
+    {
+        if (! $this->twitterCardUrl) {
+            return null;
+        }
+
+        return File::createFromUrl($this->twitterCardUrl);
+    }
+
+    public function setTwitterCard(?File $file): void
+    {
+        $this->setTwitterCardUrl($file ? $file->toUrl() : null);
+    }
+
+    static public function generateTwitterCardPath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'twitter-card',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFacebookCardUrl()
+    {
+        return $this->facebookCardUrl;
+    }
+
+    /**
+     * @param mixed $facebookCardUrl
+     */
+    public function setFacebookCardUrl($facebookCardUrl): void
+    {
+        $this->facebookCardUrl = $facebookCardUrl;
+    }
+
+    public function getFacebookCard(): ?File
+    {
+        if (! $this->facebookCardUrl) {
+            return null;
+        }
+
+        return File::createFromUrl($this->facebookCardUrl);
+    }
+
+    public function setFacebookCard(?File $file): void
+    {
+        $this->setFacebookCardUrl($file ? $file->toUrl() : null);
+    }
+
+    static public function generateFacebookCardPath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'facebook-card',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
+    }
+
+    public function getHdCardUrl()
+    {
+        return $this->hdCardUrl;
+    }
+
+    public function setHdCardUrl($hdCardUrl): void
+    {
+        $this->hdCardUrl = $hdCardUrl;
+    }
+
+    public function getHdCard(): ?File
+    {
+        if (! $this->hdCardUrl) {
+            return null;
+        }
+
+        return File::createFromUrl($this->hdCardUrl);
+    }
+
+    public function setHdCard(?File $file): void
+    {
+        $this->setHdCardUrl($file ? $file->toUrl() : null);
+    }
+
+    static public function generateHdCardPath(Episode $episode, $fileName)
+    {
+        preg_match('/^(.+)\.(.+?)$/', $fileName, $matches);
+
+        list ($fullMatch, $fileNameWithoutExtension, $extension) = $matches;
+
+        return implode('/', [
+                '',
+                'episodes',
+                Transliterator::transliterate($episode->getGuid()),
+                'hd-card',
+                Transliterator::transliterate($fileNameWithoutExtension),
+            ]) . '.' . $extension;
+    }
+
     static private function convertHoursMinutesSecondsToSeconds($input): int
     {
         list ($hours, $minutes, $seconds) = explode(':', $input);
@@ -532,7 +790,7 @@ class Episode
         $this->guid = $episode->getGuid();
         $this->title = $episode->getTitle();
         $this->subtitle = $episode->getSubtitle();
-        $this->publishedDate = $episode->getPublishedDate();
+        $this->setPublished($episode->getLocalPublished());
         $this->mediaUrl = $episode->getMediaUrl();
         $this->duration = $episode->getDuration();
         $this->fileSize = $episode->getFileSize();
@@ -559,7 +817,9 @@ class Episode
         $instance->guid = $export['guid'];
         $instance->title = $export['title'];
         $instance->subtitle = $export['subtitle'];
-        $instance->publishedDate = new \DateTime(sprintf('@%d', $export['date']));
+        $published = new \DateTime(sprintf('@%d', $export['date']));
+        $published->setTimezone(new \DateTimeZone('UTC'));
+        $instance->setPublished($published);
         $instance->mediaUrl = $export['media_url'];
         $instance->duration = static::convertHoursMinutesSecondsToSeconds($export['duration']);
         $instance->fileSize = $export['file_size'];

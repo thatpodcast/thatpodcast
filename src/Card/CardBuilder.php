@@ -61,11 +61,35 @@ class CardBuilder
 
         $backgroundImage = $this->imagine->open($cardConfiguration->getBackgroundFileName());
 
-
         $backgroundImageOriginalSize = $backgroundImage->getSize();
         if ($backgroundImageOriginalSize->getHeight() == $backgroundImageOriginalSize->getWidth()) {
             $backgroundImage->resize($size);
-        } elseif ($backgroundImageOriginalSize->getHeight() > $backgroundImageOriginalSize->getWidth()) {
+        } else {
+            $scale = max(
+                $size->getWidth() / $backgroundImageOriginalSize->getWidth(),
+                $size->getHeight() / $backgroundImageOriginalSize->getHeight()
+            );
+
+            $newWidth = ceil($backgroundImageOriginalSize->getWidth() * $scale);
+            $newHeight = ceil($backgroundImageOriginalSize->getHeight() * $scale);
+
+
+            $x = ($newWidth - $size->getWidth()) / 2;
+            $y = ($newHeight - $size->getHeight()) / 2;
+
+            if ($x < 0) {
+                $x = 0;
+            }
+
+            if ($y < 0) {
+                $y = 0;
+            }
+
+            $backgroundImage->resize(new Box($newWidth, $newHeight))->crop(new Point($x, $y), $size);
+        }
+
+        /*
+        } ($backgroundImageOriginalSize->getHeight() > $backgroundImageOriginalSize->getWidth()) {
             // scale based on width as the smallest side
             $newSize = $backgroundImageOriginalSize->widen($cardConfiguration->getWidth());
             $y = floor($newSize->getHeight() - $cardConfiguration->getHeight() / 2);
@@ -76,6 +100,7 @@ class CardBuilder
             $x = floor(($newSize->getWidth() - $cardConfiguration->getWidth()) / 2);
             $backgroundImage->resize($newSize)->crop(new Point($x, 0), $size);
         }
+        */
 
         //return $backgroundImage->thumbnail($size, ImageInterface::THUMBNAIL_OUTBOUND);
 

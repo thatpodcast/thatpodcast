@@ -2,6 +2,7 @@
 
 namespace App\Form\CommandObject\Admin;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EpisodeDto
@@ -20,10 +21,11 @@ class EpisodeDto
 
     public $guid;
 
-    public $duration;
-    public $fileSize;
     public $path;
 
+    /**
+     * @var UploadedFile
+     */
     public $backgroundImage = null;
 
     public $backgroundImageCreditBy;
@@ -34,7 +36,11 @@ class EpisodeDto
     public $itunesSummaryHtml;
     public $transcriptHtml;
 
-    public $publishedDate;
+    public $published;
+    public $publishedTimeZone = 'UTC';
 
+    /**
+     * @var UploadedFile
+     */
     public $pristineMedia = null;
 }

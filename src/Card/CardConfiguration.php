@@ -2,6 +2,9 @@
 
 namespace App\Card;
 
+use App\Entity\Episode;
+use App\FlysystemAssetManager\FlysystemAssetManager;
+
 class CardConfiguration
 {
     /**
@@ -407,6 +410,45 @@ class CardConfiguration
         return $instance
             ->withLogoFileName($logoDirectory.'/that_podcast_with_proper_case_1000x1000.png')
             ;
+    }
+
+    public function withEpisode(Episode $episode, FlysystemAssetManager $flysystemAssetManager): self
+    {
+        $cardConfiguration = clone($this);
+
+        if ($episode->getBackgroundImageUrl()) {
+            $backgroundImageTmpFile = $flysystemAssetManager->getTemporaryLocalFileName($episode->getBackgroundImage());
+
+            $cardConfiguration = $cardConfiguration
+                ->withBackgroundFileName($backgroundImageTmpFile)
+            ;
+        }
+
+        if ($episode->getPublished()) {
+            $cardConfiguration = $cardConfiguration
+                ->withDate($episode->getPublished()->format('F jS, Y'))
+            ;
+        }
+
+        if ($episode->getNumber()) {
+            $cardConfiguration = $cardConfiguration
+                ->withNumber($episode->getNumber())
+            ;
+        }
+
+        if ($episode->getTitle()) {
+            $cardConfiguration = $cardConfiguration
+                ->withTitle($episode->getTitle())
+            ;
+        }
+
+        if ($episode->getSubtitle()) {
+            $cardConfiguration = $cardConfiguration
+                ->withSubtitle($episode->getSubtitle());
+            ;
+        }
+
+        return $cardConfiguration;
     }
 
     public static function createTwitterCard(): self

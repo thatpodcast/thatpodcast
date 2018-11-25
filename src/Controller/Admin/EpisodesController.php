@@ -7,7 +7,6 @@ use App\FlysystemAssetManager\File;
 use App\FlysystemAssetManager\FlysystemAssetManager;
 use App\Form\Admin\EpisodeType;
 use App\Form\CommandObject\Admin\EpisodeDto;
-use App\Messages\Commands\ProcessPristineMedia;
 use App\Repository\EpisodeRepository;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
@@ -62,47 +61,35 @@ class EpisodesController extends AbstractController
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
-            $episode->setPublishedDate($episodeDto->publishedDate);
+            $episode->setPublished($episodeDto->published);
 
-            if ($episodeDto->backgroundImage) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $episodeDto->backgroundImage;
-
-                $file = new File(
+            $this->handleUploadedImage($flysystemAssetManager, $episodeDto->backgroundImage, function (UploadedFile $uploadedFile, $tmpFile, $width = null, $height = null) use ($episode) {
+                $file = File::create(
                     'content',
                     Episode::generateBackgroundImagePath($episode, $uploadedFile->getClientOriginalName()),
                     $uploadedFile->getClientMimeType(),
-                    $uploadedFile->getSize()
+                    filesize($tmpFile)
                 );
 
                 $episode->setBackgroundImage($file);
-                $dimensions = getimagesize($uploadedFile->getRealPath());
+                $episode->setBackgroundImageWidth($width);
+                $episode->setBackgroundImageHeight($height);
 
-                if ($dimensions) {
-                    list ($width, $height) = $dimensions;
+                return $file;
+            });
 
-                    $episode->setBackgroundImageWidth($width);
-                    $episode->setBackgroundImageHeight($height);
-                }
-
-                $flysystemAssetManager->writeFromFile($file, $uploadedFile->getRealPath());
-            }
-
-            if ($episodeDto->pristineMedia) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $episodeDto->pristineMedia;
-
-                $file = new File(
+            $this->handleUploadedFile($flysystemAssetManager, $episodeDto->pristineMedia, function (UploadedFile $uploadedFile, $tmpFile) use ($episode) {
+                $file = File::create(
                     'content',
                     Episode::generatePristineMediaPath($episode, $uploadedFile->getClientOriginalName()),
                     $uploadedFile->getClientMimeType(),
-                    $uploadedFile->getSize()
+                    filesize($tmpFile)
                 );
 
                 $episode->setPristineMedia($file);
 
-                $flysystemAssetManager->writeFromFile($file, $uploadedFile->getRealPath());
-            }
+                return $file;
+            });
 
             $this->getDoctrine()->getManager()->persist($episode);
             $this->getDoctrine()->getManager()->flush();
@@ -131,7 +118,7 @@ class EpisodesController extends AbstractController
         $episodeDto->contentHtml = $episode->getContentHtml();
         $episodeDto->itunesSummaryHtml = $episode->getItunesSummaryHtml();
         $episodeDto->transcriptHtml = $episode->getTranscriptHtml();
-        $episodeDto->publishedDate = $episode->getPublishedDate();
+        $episodeDto->published = $episode->getPublished();
 
         $form = $this->createForm(EpisodeType::class, $episodeDto);
 
@@ -146,19 +133,10 @@ class EpisodesController extends AbstractController
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
-            $episode->setPublishedDate($episodeDto->publishedDate);
+            $episode->setPublished($episodeDto->published);
 
-            if ($episodeDto->backgroundImage && $episodeDto->backgroundImage->isValid()) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $episodeDto->backgroundImage;
-
-                $logger->notice('Real Path' . $uploadedFile->getRealPath());
-                $tmpFile = tempnam(sys_get_temp_dir(), 'form-upload');
-                $uploadedFile->move(dirname($tmpFile), basename($tmpFile));
-
-                $logger->notice('Temp File' . $tmpFile);
-
-                $file = new File(
+            $this->handleUploadedImage($flysystemAssetManager, $episodeDto->backgroundImage, function (UploadedFile $uploadedFile, $tmpFile, $width = null, $height = null) use ($episode) {
+                $file = File::create(
                     'content',
                     Episode::generateBackgroundImagePath($episode, $uploadedFile->getClientOriginalName()),
                     $uploadedFile->getClientMimeType(),
@@ -166,51 +144,74 @@ class EpisodesController extends AbstractController
                 );
 
                 $episode->setBackgroundImage($file);
-                $dimensions = getimagesize($tmpFile);
+                $episode->setBackgroundImageWidth($width);
+                $episode->setBackgroundImageHeight($height);
 
-                if ($dimensions) {
-                    list ($width, $height) = $dimensions;
+                return $file;
+            });
 
-                    $episode->setBackgroundImageWidth($width);
-                    $episode->setBackgroundImageHeight($height);
-                }
-
-                $flysystemAssetManager->writeFromFile($file, $tmpFile);
-
-                unlink($tmpFile);
-            }
-
-            if ($episodeDto->pristineMedia) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $episodeDto->pristineMedia;
-
-                $file = new File(
+            $this->handleUploadedFile($flysystemAssetManager, $episodeDto->pristineMedia, function (UploadedFile $uploadedFile, $tmpFile) use ($episode) {
+                $file = File::create(
                     'content',
                     Episode::generatePristineMediaPath($episode, $uploadedFile->getClientOriginalName()),
                     $uploadedFile->getClientMimeType(),
-                    $uploadedFile->getSize()
+                    filesize($tmpFile)
                 );
 
                 $episode->setPristineMedia($file);
 
-                if ($flysystemAssetManager->exists($file)) {
-                    $flysystemAssetManager->delete($file);
-                }
-
-                $flysystemAssetManager->writeFromFile($file, $uploadedFile->getRealPath());
-
-                // TODO: Move to Doctrine Lifecycle Handler
-                $commandBus->dispatch(new ProcessPristineMedia($episode->getId()));
-            }
+                return $file;
+            });
 
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('admin_episodes');
+            return $this->redirectToRoute('admin_episodes_show', [
+                'id' => $episode->getId(),
+            ]);
         }
 
         return $this->render('admin/episodes/edit.html.twig', [
             'form' => $form->createView(),
             'episode' => $episode,
         ]);
+    }
+
+    private function handleUploadedFile(FlysystemAssetManager $flysystemAssetManager, UploadedFile $uploadedFile = null, $cb = null) {
+        if (! $cb) {
+            return;
+        }
+
+        if (! $uploadedFile) {
+            return;
+        }
+
+        if (! $uploadedFile->isValid()) {
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'flysystem-asset-manager-');
+        $uploadedFile->move(dirname($tmpFile), basename($tmpFile));
+
+        /** @var callable $cb */
+        $file = $cb($uploadedFile, $tmpFile);
+
+        $flysystemAssetManager->writeOrUpdateFromFile($file, $tmpFile);
+
+        unlink($tmpFile);
+    }
+
+    private function handleUploadedImage(FlysystemAssetManager $flysystemAssetManager, UploadedFile $uploadedFile = null, $cb = null) {
+        return $this->handleUploadedFile($flysystemAssetManager, $uploadedFile, function (UploadedFile $uploadedFile, $tmpFile) use ($cb) {
+            $dimensions = getimagesize($tmpFile);
+
+            if (! $dimensions) {
+                $dimensions = [0,0];
+            }
+
+            list ($width, $height) = $dimensions;
+
+            /** @var callable $cb */
+            return $cb($uploadedFile, $tmpFile, $width, $height);
+        });
     }
 }

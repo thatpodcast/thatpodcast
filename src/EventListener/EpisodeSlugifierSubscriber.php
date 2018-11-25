@@ -5,7 +5,7 @@ namespace App\EventListener;
 use App\Entity\Episode;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class EpisodeSlugifierSubscriber implements EventSubscriber
 {
@@ -25,10 +25,10 @@ class EpisodeSlugifierSubscriber implements EventSubscriber
 
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'prePersist',
             'preUpdate',
-        );
+        ];
     }
 
     public function preUpdate(LifecycleEventArgs $args)

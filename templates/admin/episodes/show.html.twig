@@ -8,8 +8,8 @@
             </li>
         </ul>
         <article>
-            <time class="" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
-                <span class='month'>{{ episode.publishedDate|date('M') }}</span> <span class='day'>{{ episode.publishedDate|date('jS') }}</span> <span class='year'>{{ episode.publishedDate|date('Y') }}</span> <span class='time-zone'>{{ episode.publishedDate|date('e') }}</span>
+            <time class="" datetime="{{ episode.published|date('c', episode.publishedTimeZone) }}" pubdate>
+                <span class='month'>{{ episode.published|date('M', episode.publishedTimeZone) }}</span> <span class='day'>{{ episode.published|date('jS', episode.publishedTimeZone) }}</span> <span class='year'>{{ episode.published|date('Y', episode.publishedTimeZone) }}</span> <span class='time-zone'>{{ episode.published|date('e', episode.publishedTimeZone) }}</span>
             </time>
             <header>
                 <h1><a class="no-underline text-black" href="{{ path('admin_episodes_show', {id: episode.id}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
@@ -29,7 +29,32 @@
 
             {% if episode.backgroundImage %}
                 <div>
+                    <h2>Background Image</h2>
                     <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.backgroundImage) }}">
+                </div>
+            {% endif %}
+            {% if episode.itunesCard %}
+                <div>
+                    <h2>iTunes Card</h2>
+                    <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.itunesCard) }}">
+                </div>
+            {% endif %}
+            {% if episode.facebookCard %}
+                <div>
+                    <h2>Facebook Card</h2>
+                    <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.facebookCard) }}">
+                </div>
+            {% endif %}
+            {% if episode.twitterCard %}
+                <div>
+                    <h2>Twitter Card</h2>
+                    <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.twitterCard) }}">
+                </div>
+            {% endif %}
+            {% if episode.hdCard %}
+                <div>
+                    <h2>HD (1080p) Card</h2>
+                    <img class="max-w-md" src="{{ flysystem_managed_asset_url(episode.hdCard) }}">
                 </div>
             {% endif %}
         </article>

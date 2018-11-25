@@ -13,16 +13,19 @@ class ExportClient
     private $client;
 
     /**
-     * ExportClient constructor.
+     * @var string
      */
-    public function __construct()
+    private $exportUrl;
+
+    public function __construct($exportUrl)
     {
         $this->client = new Client();
+        $this->exportUrl = $exportUrl;
     }
 
     public function fetchExport()
     {
-        $response = $this->client->request('GET', 'https://thatpodcast.io/export.json');
+        $response = $this->client->request('GET', $this->exportUrl);
 
         $json = json_decode($response->getBody(), true);
         return collect(array_values($json['episodes']));

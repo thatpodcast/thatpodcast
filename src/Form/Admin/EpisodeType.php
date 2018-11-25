@@ -36,29 +36,13 @@ class EpisodeType extends AbstractType
             ->add('transcriptHtml', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('publishedDate', DateTimeType::class, [
+            ->add('published', DateTimeType::class, [
                 'required' => false,
             ])
 
             ->add('pristineMedia', FileType::class, [
                 'required' => false,
             ])
-
-
-            /*
-
-    private $backgroundImageCreditBy;
-    private $backgroundImageCreditUrl;
-    private $backgroundImageCreditDescription;
-
-    private $contentHtml;
-    private $itunesSummaryHtml;
-    private $transcriptHtml;
-
-    private $publishedDate;
-
-    public $pristineMedia = null;
-             */
         ;
     }
 

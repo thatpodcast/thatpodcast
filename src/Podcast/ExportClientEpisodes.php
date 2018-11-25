@@ -24,9 +24,6 @@ class ExportClientEpisodes implements Episodes
 
     public function getAll()
     {
-        print_r(['export' => 'foo']);
-
-
         /** @var Collection $export */
         $export = $this->exportClient->fetchExport();
 

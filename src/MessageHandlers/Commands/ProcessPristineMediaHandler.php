@@ -72,6 +72,11 @@ class ProcessPristineMediaHandler
             return;
         }
 
+        if (! $this->flysystemAssetManager->exists($episode->getPristineMedia())) {
+            print " [ skipping; pristine media does not exist ]\n";
+            return;
+        }
+
         $pristineTmpFile = $this->flysystemAssetManager->getTemporaryLocalFileName($episode->getPristineMedia());
 
         $targetFileName = $this->slugify->slugify(implode(' ', [
@@ -96,45 +101,14 @@ class ProcessPristineMediaHandler
         $cardConfiguration = CardConfiguration::createItunesCard()
             ->withDefaultFonts($this->projectDir)
             ->withDefaultLogo($this->projectDir)
+            ->withEpisode($episode, $this->flysystemAssetManager)
             ;
-
-        if ($episode->getBackgroundImageUrl()) {
-            $backgroundImageTmpFile = $this->flysystemAssetManager->getTemporaryLocalFileName($episode->getBackgroundImage());
-
-            $cardConfiguration = $cardConfiguration
-                ->withBackgroundFileName($backgroundImageTmpFile)
-                ;
-        }
-
-        if ($episode->getPublishedDate()) {
-            $cardConfiguration = $cardConfiguration
-                ->withDate($episode->getPublishedDate()->format('F jS, Y'))
-            ;
-        }
-
-        if ($episode->getNumber()) {
-            $cardConfiguration = $cardConfiguration
-                ->withNumber($episode->getNumber())
-                ;
-        }
-
-        if ($episode->getTitle()) {
-            $cardConfiguration = $cardConfiguration
-                ->withTitle($episode->getTitle())
-            ;
-        }
-
-        if ($episode->getSubtitle()) {
-            $cardConfiguration = $cardConfiguration
-                ->withSubtitle($episode->getSubtitle());
-            ;
-        }
 
         $itunesCardFileName =  tempnam(sys_get_temp_dir(), 'episode-itunes-photo-') .'.jpg';
 
         $itunesCardImage = $this->cardBuilder->buildCard($cardConfiguration);
 
-        $itunesCardImage->save($itunesCardFileName, ['jpeg_quality' => 60]);
+        $itunesCardImage->save($itunesCardFileName, ['jpeg_quality' => 90]);
 
         $itunesCardImageExifImageType = \exif_imagetype($itunesCardFileName);
         $tagData['attached_picture'][] = [
@@ -144,28 +118,42 @@ class ProcessPristineMediaHandler
             'mime' => image_type_to_mime_type($itunesCardImageExifImageType),
         ];
 
-        unlink($itunesCardFileName);
+        $itunesCardFile = File::create(
+            'content',
+            Episode::generateItunesCardPath($episode, 'itunes.jpg'),
+            image_type_to_mime_type($itunesCardImageExifImageType),
+            filesize($itunesCardFileName)
+        );
 
         $tagwriter->tag_data = $tagData;
-        if (! $tagwriter->WriteTags()) {
+        if (! $tagwriter->WriteTags())  {
+            // Old versions of MP3 files have been known to fail since getid3 cannot
+            // determine what type of file they are.
             print_r(['error' => $tagwriter->errors, 'warning' => $tagwriter->warnings]);
-            return;
         }
 
-        $mediaFile = new File(
+        $this->flysystemAssetManager->writeOrUpdateFromFile($itunesCardFile, $itunesCardFileName);
+
+        $episode->setItunesCard($itunesCardFile);
+
+        unlink($itunesCardFileName);
+
+        $mediaFile = File::create(
             'content',
             Episode::generateMediaPath($episode, $targetFileName),
             $episode->getPristineMedia()->getContentType(),
             filesize($pristineTmpFile)
         );
 
-        if ($this->flysystemAssetManager->exists($mediaFile)) {
-            $this->flysystemAssetManager->delete($mediaFile);
-        }
-
-        $this->flysystemAssetManager->writeFromFile($mediaFile, $pristineTmpFile);
+        $this->flysystemAssetManager->writeOrUpdateFromFile($mediaFile, $pristineTmpFile);
 
         $episode->setMedia($mediaFile);
+
+        $data = $getID3->analyze($pristineTmpFile);
+
+        if (array_key_exists('playtime_seconds', $data)) {
+            $episode->setDuration($data['playtime_seconds']);
+        }
 
         $this->objectManager->flush();
         $this->objectManager->clear();
