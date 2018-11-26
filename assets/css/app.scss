@@ -40,7 +40,7 @@ body {
 }
 
 .transcript__speaker { font-weight: bold; }
-.transcript__time { font-style: italic; font-size: smaller; margin-left: 1em; opacity: .5;}
+.transcript__time { font-style: italic; font-size: smaller; margin-left: 1em; opacity: .75;}
 .transcript__content { display: block; }
 
 @tailwind utilities;
