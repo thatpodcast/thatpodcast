@@ -459,7 +459,7 @@ class CardConfiguration
             ->withNumberFontSize('96')
             ->withTitleFontSize('24')
             ->withSubtitleFontSize('18')
-            ->withLogoDimensions(192, 192)
+            ->withLogoDimensions(128, 128)
             ;
     }
 

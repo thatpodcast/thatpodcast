@@ -88,22 +88,6 @@ class CardBuilder
             $backgroundImage->resize(new Box($newWidth, $newHeight))->crop(new Point($x, $y), $size);
         }
 
-        /*
-        } ($backgroundImageOriginalSize->getHeight() > $backgroundImageOriginalSize->getWidth()) {
-            // scale based on width as the smallest side
-            $newSize = $backgroundImageOriginalSize->widen($cardConfiguration->getWidth());
-            $y = floor($newSize->getHeight() - $cardConfiguration->getHeight() / 2);
-            $backgroundImage->resize($newSize)->crop(new Point(0, $y), $size);
-        } else {
-            // scale based on height as the smallest side
-            $newSize = $backgroundImageOriginalSize->heighten($cardConfiguration->getHeight());
-            $x = floor(($newSize->getWidth() - $cardConfiguration->getWidth()) / 2);
-            $backgroundImage->resize($newSize)->crop(new Point($x, 0), $size);
-        }
-        */
-
-        //return $backgroundImage->thumbnail($size, ImageInterface::THUMBNAIL_OUTBOUND);
-
         return $backgroundImage;
     }
 
