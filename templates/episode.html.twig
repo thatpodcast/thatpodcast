@@ -37,7 +37,7 @@
     <meta name="twitter:label1" value="Published" />
     <meta name="twitter:data1" value="{{ episode.published|date('M jS Y') }}" />
     <meta name="twitter:label2" value="Duration" />
-    <meta name="twitter:data2" value="{{ episode.duration }}" />
+    <meta name="twitter:data2" value="{{ helpers.friendlyDuration(episode.duration) }}" />
 {% endblock %}
 
 {% block stylesheets %}
