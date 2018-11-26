@@ -4882,8 +4882,9 @@ signal-exit@^3.0.0:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
 simple-icons@^1.9.6:
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/simple-icons/-/simple-icons-1.9.6.tgz#0b609d787b0af460173953601975c951f1ac59b5"
+  version "1.9.14"
+  resolved "https://registry.yarnpkg.com/simple-icons/-/simple-icons-1.9.14.tgz#e358725ece95d84a9154296318c97f7aa9d0771e"
+  integrity sha512-29ww/0tEXgnUCzdOVT3RQoyRYSd6aBFCG15PSmDjgAIen6tUueIcXJo+ODuMpzNXk3XlR9BmJ3EsAB8tPdmnig==
 
 slash@^1.0.0:
   version "1.0.0"
