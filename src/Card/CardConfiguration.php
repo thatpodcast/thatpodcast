@@ -453,7 +453,7 @@ class CardConfiguration
 
     public static function createTwitterCard(): self
     {
-        return CardConfiguration::create(750, 560)
+        return CardConfiguration::create(876, 438)
             ->withMargin(16)
             ->withDateFontSize('18')
             ->withNumberFontSize('96')
