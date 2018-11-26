@@ -51,10 +51,6 @@
                 <h1>Episode {{ episode.number }}: {{ episode.title }}</h1>
                 {% if episode.subtitle is defined %}<h2>{{ episode.subtitle }}</h2>{% endif %}
             </header>
-            <div class="share">
-                <a href="http://twitter.com/share" class="twitter-share-button" data-url="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" data-via="thatpodcast" data-counturl="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" ><i class="icon-twitter"></i> Twitter</a>
-                <div class="fb-share-button" data-href="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" data-type="button_count"></div>
-            </div>
             <div class="controls">
                 <p class="flex">
                     <span class="duration">{{ helpers.friendlyDuration(episode.duration) }}</span>
