@@ -13,6 +13,9 @@
                     <article>
                         <header>
                             <h1><a class="no-underline text-black text-base" href="{{ path('admin_episodes_show', {id: episode.id}) }}">Episode {{ episode.number }}: {{ episode.title }}</a></h1>
+                            {% if episode.subtitle %}
+                                <h2 class="text-grey-darker text-sm font-normal">{{ episode.subtitle }}</h2>
+                            {% endif %}
                         </header>
 
                         {% if episode.backgroundImage %}

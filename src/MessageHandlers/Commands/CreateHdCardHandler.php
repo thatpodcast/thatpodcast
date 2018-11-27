@@ -83,5 +83,6 @@ class CreateHdCardHandler
         $episode->setHdCard($cardFile);
 
         $this->objectManager->flush();
+        $this->objectManager->clear();
     }
 }

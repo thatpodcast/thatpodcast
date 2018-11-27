@@ -454,11 +454,11 @@ class CardConfiguration
     public static function createTwitterCard(): self
     {
         return CardConfiguration::create(876, 438)
-            ->withMargin(16)
-            ->withDateFontSize('18')
-            ->withNumberFontSize('96')
+            ->withMargin(32)
+            ->withDateFontSize('16')
+            ->withNumberFontSize('48')
             ->withTitleFontSize('24')
-            ->withSubtitleFontSize('18')
+            ->withSubtitleFontSize('16')
             ->withLogoDimensions(128, 128)
             ;
     }
@@ -466,7 +466,7 @@ class CardConfiguration
     public static function createFacebookCard(): self
     {
         return CardConfiguration::create(1200, 628)
-            ->withMargin(16)
+            ->withMargin(32)
             ->withDateFontSize('24')
             ->withNumberFontSize('96')
             ->withTitleFontSize('32')
@@ -490,7 +490,7 @@ class CardConfiguration
     public static function create1080pCard(): self
     {
         return CardConfiguration::create(1920, 1080)
-            ->withMargin(32)
+            ->withMargin(64)
             ->withDateFontSize('32')
             ->withNumberFontSize('130')
             ->withTitleFontSize('54')

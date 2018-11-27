@@ -84,5 +84,6 @@ class CreateTwitterCardHandler
         $episode->setTwitterCard($cardFile);
 
         $this->objectManager->flush();
+        $this->objectManager->clear();
     }
 }

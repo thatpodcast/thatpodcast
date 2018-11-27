@@ -247,7 +247,7 @@ class CardBuilder
         }
 
         if ($cardConfiguration->hasSubtitle()) {
-            $allLines[] = ['spacing' => $cardConfiguration->getMargin()];
+            $allLines[] = ['spacing' => $cardConfiguration->getMargin() / 2];
             $allLines[] = $calculateLines(
                 $cardConfiguration->getSubtitle(),
                 $this->imagine->font(

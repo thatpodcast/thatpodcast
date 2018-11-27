@@ -83,5 +83,6 @@ class CreateFacebookCardHandler
         $episode->setFacebookCard($cardFile);
 
         $this->objectManager->flush();
+        $this->objectManager->clear();
     }
 }
