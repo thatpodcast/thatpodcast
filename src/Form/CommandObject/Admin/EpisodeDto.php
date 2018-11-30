@@ -36,6 +36,9 @@ class EpisodeDto
     public $itunesSummaryHtml;
     public $transcriptHtml;
 
+    /**
+     * @var UploadedFile
+     */
     public $transcriptText;
 
     public $published;

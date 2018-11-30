@@ -36,7 +36,7 @@ class EpisodeType extends AbstractType
             ->add('transcriptHtml', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('transcriptText', TextareaType::class, [
+            ->add('transcriptText', FileType::class, [
                 'required' => false,
             ])
             ->add('published', DateTimeType::class, [

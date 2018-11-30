@@ -60,7 +60,6 @@ class EpisodesController extends AbstractController
             $episode->setBackgroundImageCreditDescription($episodeDto->backgroundImageCreditDescription);
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
-            $episode->setTranscriptText($episodeDto->transcriptText);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
             $episode->setPublished($episodeDto->published);
 
@@ -90,6 +89,10 @@ class EpisodesController extends AbstractController
                 $episode->setPristineMedia($file);
 
                 return $file;
+            });
+
+            $this->handleUploadedText($episodeDto->transcriptText, function (UploadedFile $uploadedFile, $tmpFile) use ($episode) {
+                $episode->setTranscriptText(file_get_contents($tmpFile));
             });
 
             $this->getDoctrine()->getManager()->persist($episode);
@@ -119,7 +122,6 @@ class EpisodesController extends AbstractController
         $episodeDto->contentHtml = $episode->getContentHtml();
         $episodeDto->itunesSummaryHtml = $episode->getItunesSummaryHtml();
         $episodeDto->transcriptHtml = $episode->getTranscriptHtml();
-        $episodeDto->transcriptText = $episode->getTranscriptText();
         $episodeDto->published = $episode->getPublished();
 
         $form = $this->createForm(EpisodeType::class, $episodeDto);
@@ -135,7 +137,6 @@ class EpisodesController extends AbstractController
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
-            $episode->setTranscriptText($episodeDto->transcriptText);
             $episode->setPublished($episodeDto->published);
 
             $this->handleUploadedImage($flysystemAssetManager, $episodeDto->backgroundImage, function (UploadedFile $uploadedFile, $tmpFile, $width = null, $height = null) use ($episode) {
@@ -166,6 +167,10 @@ class EpisodesController extends AbstractController
                 return $file;
             });
 
+            $this->handleUploadedText($episodeDto->transcriptText, function (UploadedFile $uploadedFile, $tmpFile) use ($episode) {
+                $episode->setTranscriptText(file_get_contents($tmpFile));
+            });
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('admin_episodes_show', [
@@ -179,6 +184,27 @@ class EpisodesController extends AbstractController
         ]);
     }
 
+    private function handleUploadedText(UploadedFile $uploadedFile = null, $cb = null) {
+        if (! $cb) {
+            return;
+        }
+
+        if (! $uploadedFile) {
+            return;
+        }
+
+        if (! $uploadedFile->isValid()) {
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'text-');
+        $uploadedFile->move(dirname($tmpFile), basename($tmpFile));
+
+        /** @var callable $cb */
+        $cb($uploadedFile, $tmpFile);
+
+        unlink($tmpFile);
+    }
     private function handleUploadedFile(FlysystemAssetManager $flysystemAssetManager, UploadedFile $uploadedFile = null, $cb = null) {
         if (! $cb) {
             return;
