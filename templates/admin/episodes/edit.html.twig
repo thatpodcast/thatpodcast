@@ -99,6 +99,14 @@
             {{ form_errors(form.transcriptHtml) }}
         </div>
 
+        <div class="max-w-sm my-4">
+            <h2>RAW Transcript (TEXT)</h2>
+            {{ form_label(form.transcriptText, null, { 'label_attr': {'class': 'font-text block text-brand-dark text-sm mb-2'} }) }}
+            {{ form_widget(form.transcriptText, { 'attr': {'class': 'font-text shadow appearance-none border rounded w-full py-2 px-3 text-brand-darker leading-tight focus:outline-none focus:shadow-outline'} }) }}
+            {{ form_help(form.transcriptText) }}
+            {{ form_errors(form.transcriptText) }}
+        </div>
+
         <button class="rounded bg-green py-2 px-4 my-2" type="submit">Save Changes</button>
         {{ form_end(form) }}
 

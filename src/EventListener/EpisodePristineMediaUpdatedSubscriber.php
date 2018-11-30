@@ -113,7 +113,10 @@ class EpisodePristineMediaUpdatedSubscriber implements EventSubscriber
             return;
         }
 
-        $this->commandBus->dispatch(new ProcessPristineMedia($entity->getId()));
+        if (! is_null($entity->getPristineMediaUrl())) {
+            $this->commandBus->dispatch(new ProcessPristineMedia($entity->getId()));
+        }
+
         $this->commandBus->dispatch(new CreateFacebookCard($entity->getId()));
         $this->commandBus->dispatch(new CreateTwitterCard($entity->getId()));
         $this->commandBus->dispatch(new CreateHdCard($entity->getId()));

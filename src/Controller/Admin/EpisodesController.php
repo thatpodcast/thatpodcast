@@ -60,6 +60,7 @@ class EpisodesController extends AbstractController
             $episode->setBackgroundImageCreditDescription($episodeDto->backgroundImageCreditDescription);
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
+            $episode->setTranscriptText($episodeDto->transcriptText);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
             $episode->setPublished($episodeDto->published);
 
@@ -118,6 +119,7 @@ class EpisodesController extends AbstractController
         $episodeDto->contentHtml = $episode->getContentHtml();
         $episodeDto->itunesSummaryHtml = $episode->getItunesSummaryHtml();
         $episodeDto->transcriptHtml = $episode->getTranscriptHtml();
+        $episodeDto->transcriptText = $episode->getTranscriptText();
         $episodeDto->published = $episode->getPublished();
 
         $form = $this->createForm(EpisodeType::class, $episodeDto);
@@ -133,6 +135,7 @@ class EpisodesController extends AbstractController
             $episode->setContentHtml($episodeDto->contentHtml);
             $episode->setItunesSummaryHtml($episodeDto->itunesSummaryHtml);
             $episode->setTranscriptHtml($episodeDto->transcriptHtml);
+            $episode->setTranscriptText($episodeDto->transcriptText);
             $episode->setPublished($episodeDto->published);
 
             $this->handleUploadedImage($flysystemAssetManager, $episodeDto->backgroundImage, function (UploadedFile $uploadedFile, $tmpFile, $width = null, $height = null) use ($episode) {

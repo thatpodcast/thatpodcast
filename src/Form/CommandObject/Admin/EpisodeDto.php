@@ -36,6 +36,8 @@ class EpisodeDto
     public $itunesSummaryHtml;
     public $transcriptHtml;
 
+    public $transcriptText;
+
     public $published;
     public $publishedTimeZone = 'UTC';
 

@@ -109,6 +109,11 @@ class Episode
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    private $transcriptText;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $transcriptHtml;
 
     /**
@@ -421,6 +426,18 @@ class Episode
     public function setTranscriptHtml(?string $transcriptHtml): self
     {
         $this->transcriptHtml = $transcriptHtml;
+
+        return $this;
+    }
+
+    public function getTranscriptText(): ?string
+    {
+        return $this->transcriptText;
+    }
+
+    public function setTranscriptText(?string $transcriptText): self
+    {
+        $this->transcriptText = $transcriptText;
 
         return $this;
     }

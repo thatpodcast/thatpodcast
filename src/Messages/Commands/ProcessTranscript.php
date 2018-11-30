@@ -2,7 +2,7 @@
 
 namespace App\Messages\Commands;
 
-class ProcessPristineMedia
+class ProcessTranscript
 {
     /**
      * @var int

@@ -72,6 +72,11 @@ class ProcessPristineMediaHandler
             return;
         }
 
+        if (is_null($episode->getPristineMediaUrl())) {
+            print " [ skipping; pristine media is not set ]\n";
+            return;
+        }
+
         if (! $this->flysystemAssetManager->exists($episode->getPristineMedia())) {
             print " [ skipping; pristine media does not exist ]\n";
             return;
