@@ -8,3 +8,4 @@ require('../images/newsletter.jpg');
 require('../images/red-mic.jpg');
 require('../images/that-podcast-cover-photo.jpg');
 require('../svg/thatpodcast-logo.svg');
+require('../fonts/fonts.css');

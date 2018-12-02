@@ -16,46 +16,46 @@
                 <ul class="list-reset md:p-0 md:flex-1 md:flex md:items-center">
                     <li class="md:pr-2">
                         <a class="no-underline" href="{{ path('home') }}">
-                            {{ svg('assets/svg/thatpodcast-logo.svg', {attr: {'aria-label': 'Home', 'role': 'img' }, classes: 'h-8 md:h-16 block'}) }}
+                            {{ svg('assets/svg/thatpodcast-logo.svg', {attr: {'aria-label': 'Home', 'role': 'img' }, classes: 'mb-4 md:mb-0 h-16 md:h-24 lg:h-32 block svg-shadow'}) }}
                         </a>
                     </li>
-                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('home') }}">Episodes</a></li>
-                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('newsletter') }}">Newsletter</a></li>
-                    <li class="py-1 md:py-0 md:px-2"><a href="{{ path('about') }}">About</a></li>
+                    <li class="py-1 md:py-0"><a class="font-sans font-thin text-lg md:text-xl lg:text-2xl md:px-2 md:py-2 lg:px-4 lg:py-4 text-shadow" href="{{ path('home') }}">Episodes</a></li>
+                    <li class="py-1 md:py-0"><a class="font-sans font-thin text-lg md:text-xl lg:text-2xl md:px-2 md:py-2 lg:px-4 lg:py-4 text-shadow" href="{{ path('newsletter') }}">Newsletter</a></li>
+                    <li class="py-1 md:py-0"><a class="font-sans font-thin text-lg md:text-xl lg:text-2xl md:px-2 md:py-2 lg:px-4 lg:py-4 text-shadow" href="{{ path('about') }}">About</a></li>
                 </ul>
-                <ul class="right-menu list-reset invisible lg:visible md:flex-1 md:flex md:justify-end  md:items-center">
-                    <li class="px-2">
+                <ul class="right-menu list-reset hidden lg:not-hidden md:flex-1 md:flex md:justify-end  md:items-center">
+                    <li>
                         <a href="https://itunes.apple.com/us/podcast/that-podcast/id881491539">
-                            {{ svg('node_modules/simple-icons/icons/podcasts.svg', {attr: {'aria-label': 'RSS', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/podcasts.svg', {attr: {'aria-label': 'RSS', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow xl:h-12 xl:h-14'}) }}
                         </a>
                     </li>
-                    <li class="px-2">
+                    <li>
                         <a href="https://open.spotify.com/show/3XYrUZnOFi4dV2aM3PxnYc">
-                            {{ svg('node_modules/simple-icons/icons/spotify.svg', {attr: {'aria-label': 'Spotify', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/spotify.svg', {attr: {'aria-label': 'Spotify', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow xl:h-12 xl:h-14'}) }}
                         </a>
                     </li>
-                    <li class="px-2">
+                    <li>
                         <a href="http://www.stitcher.com/podcast/that-podcast?refid=stpr">
-                            {{ svg('node_modules/simple-icons/icons/stitcher.svg', {attr: {'aria-label': 'Stitcher', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/stitcher.svg', {attr: {'aria-label': 'Stitcher', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow xl:h-12 xl:h-14'}) }}
                         </a>
                     </li>
-                    <li class="px-2">
+                    <li>
                         <a href="{{ path('itunes') }}">
-                            {{ svg('node_modules/simple-icons/icons/rss.svg', {attr: {'aria-label': 'Apple Podcasts', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/rss.svg', {attr: {'aria-label': 'Apple Podcasts', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow xl:h-12 xl:h-14'}) }}
                         </a>
                     </li>
-                    <li class="px-2">
+                    <li>
                         <a href="https://twitter.com/thatpodcast">
-                            {{ svg('node_modules/simple-icons/icons/twitter.svg', {attr: {'aria-label': 'Twitter', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/twitter.svg', {attr: {'aria-label': 'Twitter', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow lg:h-12 xl:h-14'}) }}
                         </a>
                     </li>
-                    <li class="px-2">
+                    <li>
                         <a href="https://www.facebook.com/pages/That-Podcast/318310284991754">
-                            {{ svg('node_modules/simple-icons/icons/facebook.svg', {attr: {'aria-label': 'Facebook', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/facebook.svg', {attr: {'aria-label': 'Facebook', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow lg:h-12 xl:h-14'}) }}
                         </a></li>
-                    <li class="px-2">
+                    <li>
                         <a href="https://github.com/thatpodcast">
-                            {{ svg('node_modules/simple-icons/icons/github.svg', {attr: {'aria-label': 'GitHub', 'role': 'img' }, classes: 'h-4 block'}) }}
+                            {{ svg('node_modules/simple-icons/icons/github.svg', {attr: {'aria-label': 'GitHub', 'role': 'img' }, classes: 'h-10 p-2 block svg-shadow lg:h-12 xl:h-14'}) }}
                         </a>
                     </li>
                 </ul>

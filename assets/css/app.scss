@@ -28,7 +28,6 @@ body {
     background-size: auto,auto,cover;
     background-position: 50%,50%,50%;
     @apply text-white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
 
     a {
         @apply text-white no-underline;
@@ -44,3 +43,18 @@ body {
 .transcript__content { display: block; }
 
 @tailwind utilities;
+
+@responsive {
+    .text-shadow {
+        text-shadow: 0 0 2px rgba(0,0,0,0.9), 1px 1px 1px rgba(0,0,0,0.9), 1px 1px 5px rgba(0,0,0,0.75);
+    }
+
+    .text-shadow-none {
+        text-shadow: none;
+    }
+
+    .svg-shadow {
+        -webkit-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.75));
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.75));
+    }
+}
