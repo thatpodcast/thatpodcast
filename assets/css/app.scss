@@ -10,17 +10,14 @@ body {
 
 body {
     article {
-        p {
-            @apply font-normal;
-            @apply leading-normal;
-            @apply py-2;
-        }
-    }
-
-    p.transcript {
+        @apply font-serif;
         @apply font-normal;
         @apply leading-normal;
-        @apply py-2;
+        @apply text-lg;
+
+        p {
+            @apply py-2;
+        }
     }
 }
 
@@ -38,9 +35,24 @@ body {
     }
 }
 
-.transcript__speaker { font-weight: bold; }
-.transcript__time { font-style: italic; font-size: smaller; margin-left: 1em; opacity: .75;}
-.transcript__content { display: block; }
+.episode-detail {
+    h1, h2, h3, h4 {
+        @apply font-sans font-thin text-4xl;
+    }
+}
+.transcript__speaker {
+    @apply font-sans font-bold text-lg leading-normal;
+}
+
+.transcript__time {
+    @apply font-sans font-normal text-lg leading-normal;
+    @apply ml-1;
+}
+
+.transcript__content {
+    @apply font-serif font-normal text-lg leading-loose;
+    @apply block my-2;
+}
 
 @import "components/hero";
 

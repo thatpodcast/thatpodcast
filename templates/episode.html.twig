@@ -57,7 +57,7 @@
                 <p class="flex hero-subtitle">
                     <span class="duration pr-4 lg:pr-8">{{ helpers.friendlyDuration(episode.duration) }}</span>
                     <span class="size pr-4 lg:pr-8">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
-                    <span class="download lg:pr-8 flex"><a class="no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'fill-current mr-1 svg-shadow'}) }} download</a></span>
+                    <span class="download lg:pr-8 flex"><a class="no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'fill-current svg-shadow'}) }} download</a></span>
                 </p>
             </div>
         </div>
@@ -99,16 +99,22 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container py-16">
-        <time class="block pb-4" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
+    <article class="container py-8 episode-detail">
+        <time class="block font-sans text-2xl font-light" datetime="{{ episode.publishedDate|date('c') }}" pubdate>
             <span class='month'>{{ episode.publishedDate|date('M') }}</span> <span class='day'>{{ episode.publishedDate|date('jS') }}</span> <span class='year'>{{ episode.publishedDate|date('Y') }}</span>
         </time>
-        {% if episode.contentHtml is defined %}{{ episode.contentHtml|raw }}{% endif %}
-        {% if episode.transcriptHtml is not empty %}
-            <h2>Transcript</h2>
-            <div>{{ episode.transcriptHtml|raw }}</div>
+        {% if episode.contentHtml is defined %}
+            <section class="py-4">
+                {{ episode.contentHtml|raw }}
+            </section>
         {% endif %}
-    </div>
+        {% if episode.transcriptHtml is not empty %}
+            <section class="py-4">
+                <h1>Transcript</h1>
+                <div>{{ episode.transcriptHtml|raw }}</div>
+            </section>
+        {% endif %}
+    </article>
 {% endblock %}
 
 {% block javascripts %}

@@ -52,15 +52,29 @@
   @apply font-sans font-thin text-shadow text-xl text-shadow;
   @apply leading-loose;
 
+  svg {
+    @apply flex-1 mb-1;
+    width: auto;
+    height: 1.25rem;
+    vertical-align: middle;
+  }
+
   @screen md {
     @apply text-xl;
   }
 
   @screen lg {
     @apply text-2xl;
+
+    svg {
+      height: 2rem;
+    }
   }
 
   @screen lg {
     @apply text-3xl;
+  }
+
+  @screen lg {
   }
 }
