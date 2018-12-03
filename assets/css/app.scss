@@ -42,6 +42,8 @@ body {
 .transcript__time { font-style: italic; font-size: smaller; margin-left: 1em; opacity: .75;}
 .transcript__content { display: block; }
 
+@import "components/hero";
+
 @tailwind utilities;
 
 @responsive {

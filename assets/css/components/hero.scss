@@ -1,0 +1,66 @@
+.hero {
+  @apply pt-8 pb-4;
+  @apply leading-normal;
+
+  @screen md {
+    @apply pt-12;
+  }
+
+  @screen lg {
+    @apply pt-16 pb-8;
+  }
+
+  @screen xl {
+    @apply pt-24;
+  }
+}
+
+.hero-header {
+  @apply pt-8;
+
+  @screen md {
+    @apply pt-12;
+  }
+
+  @screen lg {
+    @apply pt-16 pb-8;
+  }
+
+  @screen xl {
+    @apply pt-24;
+  }
+}
+
+.hero-title {
+  @apply font-sans font-bold text-shadow text-xl text-shadow;
+  @apply leading-tight;
+
+  @screen md {
+    @apply text-3xl;
+  }
+
+  @screen lg {
+    @apply text-4xl;
+  }
+
+  @screen lg {
+    @apply text-6xl;
+  }
+}
+
+.hero-subtitle {
+  @apply font-sans font-thin text-shadow text-xl text-shadow;
+  @apply leading-loose;
+
+  @screen md {
+    @apply text-xl;
+  }
+
+  @screen lg {
+    @apply text-2xl;
+  }
+
+  @screen lg {
+    @apply text-3xl;
+  }
+}

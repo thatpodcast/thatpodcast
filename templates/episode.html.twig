@@ -45,19 +45,19 @@
 {% endblock %}
 
 {% block hero %}
-    <section id="hero" class="episode">
-        <div class="container pt-8 pb-4 md:pt-12 lg:pt-16 lg:pb-8 xl:pt-24 leading-normal">
-            <header class="pt-8 g:pt-32 md:pt-12 lg:pt-16 xl:pt-24">
-                <h1 class="font-sans font-bold text-shadow text-xl md:text-3xl lg:text-4xl xl:text-6xl text-shadow">Episode {{ episode.number }}: {{ episode.title }}</h1>
+    <section class="episode">
+        <div class="container hero">
+            <header class="hero-header">
+                <h1 class="hero-title">Episode {{ episode.number }}: {{ episode.title }}</h1>
                 {% if episode.subtitle is defined %}
-                    <h2 class="font-sans font-thin text-shadow text-lg md:text:xl lg:text-2xl xl:text-3xl text-shadow">{{ episode.subtitle }}</h2>
+                    <h2 class="hero-subtitle">{{ episode.subtitle }}</h2>
                 {% endif %}
             </header>
             <div class="controls">
-                <p class="flex">
-                    <span class="font-sans font-normal text-base md:text-lg lg:text-xl xl:text-2xl text-shadow duration">{{ helpers.friendlyDuration(episode.duration) }}</span>
-                    <span class="font-sans font-normal text-base md:text-lg lg:text-xl xl:text-2xl text-shadow size pl-2">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
-                    <span class="font-sans font-normal text-base md:text-lg lg:text-xl xl:text-2xl text-shadow download pl-2"><a class="flex no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'h-5 md:h-6 lg:h-7 xl:h-8 fill-current mr-1 svg-shadow'}) }} download</a></span>
+                <p class="flex hero-subtitle">
+                    <span class="duration pr-4 lg:pr-8">{{ helpers.friendlyDuration(episode.duration) }}</span>
+                    <span class="size pr-4 lg:pr-8">{{ helpers.friendlyFileSize(episode.fileSize) }}</span>
+                    <span class="download lg:pr-8 flex"><a class="no-underline" href="{{ flysystem_managed_asset_url(episode.download) }}">{{ svg('assets/svg/download-icon.svg', {classes: 'fill-current mr-1 svg-shadow'}) }} download</a></span>
                 </p>
             </div>
         </div>
