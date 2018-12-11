@@ -187,6 +187,7 @@ class Episode
     public function setNumber(?string $number): self
     {
         $this->number = $number;
+        $this->numberForSort = sprintf('%010.1f', $number);
 
         return $this;
     }
