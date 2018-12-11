@@ -106,7 +106,7 @@
         </footer>
         <script src="{{ asset('build/app.js') }}"></script>
         {% block javascripts %}{% endblock %}
-        {% if GOOGLE_ANALYTICS_TRACKING_ID %}
+        {% if GOOGLE_ANALYTICS_TRACKING_ID and not app.user %}
             <!-- Global site tag (gtag.js) - Google Analytics -->
             <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_TRACKING_ID }}"></script>
             <script>
