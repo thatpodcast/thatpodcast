@@ -6,7 +6,7 @@
         <title>{% if vip %}[VIP] {% endif %}That Podcast with Beau and Dave</title>
         <link>http://thatpodcast.io</link>
         <language>en-GB</language>
-        <copyright>2014 That Podcast, Beau Simensen, and Dave Marshall</copyright>
+        <copyright>{{ "now"|date('Y') }} That Podcast, Beau Simensen, and Dave Marshall</copyright>
         <itunes:subtitle>Beau and Dave talking about life as dads, programmers, and entrepreneurs.</itunes:subtitle>
         <itunes:author>Beau Simensen &amp; Dave Marshall</itunes:author>
         <itunes:keywords>php,development,software,entrepreneurship</itunes:keywords>
@@ -15,7 +15,7 @@
         </itunes:category>
         <itunes:summary>
         </itunes:summary>
-        <description>{% if vip %}VIP feed including unpublished episodes! {% endif %}Beau and Dave talking about life as dads, programmers, and entrepreneurs.</description>
+        <description>{% if vip %}VIP feed including unpublished future episodes! {% endif %}Beau and Dave talking about life as dads, programmers, and entrepreneurs.</description>
         <itunes:owner>
             <itunes:name>Beau Simensen &amp; Dave Marshall</itunes:name>
             <itunes:email>hello@thatpodcast.io</itunes:email>
@@ -24,7 +24,7 @@
         <itunes:image href="{{ absolute_url(asset('build/images/that-podcast-cover-photo.jpg')) }}"/>
         {% for episode in episodes|reverse %}
             <item>
-                <title>{% if not episode.isPublished %}Future {% endif %}Episode {{ episode.number }}: {{ episode.title }}</title>
+                <title>Episode {{ episode.number }}: {% if not episode.isPublished %}[VIP] {% endif %}{{ episode.title }}</title>
                 <itunes:author>Beau Simensen &amp; Dave Marshall</itunes:author>
                 {% if episode.subtitle %}
                     <itunes:subtitle>{{ episode.subtitle }}</itunes:subtitle>
