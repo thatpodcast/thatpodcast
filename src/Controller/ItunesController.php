@@ -15,6 +15,7 @@ class ItunesController extends AbstractController
     {
         $response = $this->render('itunes.xml.twig', [
             'episodes' => $episodeRepository->findAllPublishedSorted(),
+            'vip' => false,
         ]);
 
         $response->headers->set('Content-Type', 'application/rss+xml');

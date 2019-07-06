@@ -15,7 +15,7 @@ class VipController extends AbstractController
     {
         $response = $this->render('itunes.xml.twig', [
             'episodes' => $episodeRepository->findAllSorted(),
-            'block' => true,
+            'vip' => true,
         ]);
 
         $response->headers->set('Content-Type', 'application/rss+xml');

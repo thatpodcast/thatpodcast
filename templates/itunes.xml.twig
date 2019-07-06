@@ -3,7 +3,7 @@
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <atom:link href="{{ app.request.getSchemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}" rel="self" type="application/rss+xml"/>
-        <title>That Podcast with Beau and Dave</title>
+        <title>{% if vip %}[VIP] {% endif %}That Podcast with Beau and Dave</title>
         <link>http://thatpodcast.io</link>
         <language>en-GB</language>
         <copyright>2014 That Podcast, Beau Simensen, and Dave Marshall</copyright>
@@ -15,7 +15,7 @@
         </itunes:category>
         <itunes:summary>
         </itunes:summary>
-        <description>Beau and Dave talking about life as dads, programmers, and entrepreneurs.</description>
+        <description>{% if vip %}VIP feed including unpublished episodes! {% endif %}Beau and Dave talking about life as dads, programmers, and entrepreneurs.</description>
         <itunes:owner>
             <itunes:name>Beau Simensen &amp; Dave Marshall</itunes:name>
             <itunes:email>hello@thatpodcast.io</itunes:email>
@@ -24,7 +24,7 @@
         <itunes:image href="{{ absolute_url(asset('build/images/that-podcast-cover-photo.jpg')) }}"/>
         {% for episode in episodes|reverse %}
             <item>
-                <title>Episode {{ episode.number }}: {{ episode.title }}</title>
+                <title>{% if not episode.isPublished %}Future {% endif %}Episode {{ episode.number }}: {{ episode.title }}</title>
                 <itunes:author>Beau Simensen &amp; Dave Marshall</itunes:author>
                 {% if episode.subtitle %}
                     <itunes:subtitle>{{ episode.subtitle }}</itunes:subtitle>

@@ -856,4 +856,9 @@ class Episode
 
         return $instance;
     }
+
+    public function isPublished(): bool
+    {
+        return $this->published->getTimestamp() < time();
+    }
 }
