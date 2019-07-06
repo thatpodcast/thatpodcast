@@ -17,6 +17,9 @@ security:
                     dave:
                         password: '%env(resolve:PASSWORD_FOR_DAVE)%'
                         roles: 'ROLE_ADMIN'
+                    vip:
+                        password: '%env(resolve:PASSWORD_FOR_VIP)%'
+                        roles: 'ROLE_VIP'
     encoders:
         Symfony\Component\Security\Core\User\User:
             algorithm: bcrypt
@@ -24,6 +27,9 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        vip:
+            pattern: ^/vip.rss
+            http_basic: true
         main:
             anonymous: true
             remember_me:
@@ -48,3 +54,4 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/vip.rss, roles: ROLE_VIP }
