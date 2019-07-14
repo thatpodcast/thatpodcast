@@ -22,7 +22,7 @@ require('jplayer');
             cssSelectorAncestor: "#jp_container_audio_1",
             smoothPlayBar: true,
             remainingDuration: true,
-            keyEnabled: true,
+            keyEnabled: false,
             keyBindings: {
                 // Disable some of the default key controls
                 muted: null,

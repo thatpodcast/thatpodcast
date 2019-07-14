@@ -11,6 +11,7 @@
         "aws/aws-sdk-php": "^3.71",
         "behat/transliterator": "^1.2",
         "cocur/slugify": "^3.1",
+        "doctrine/orm": "^2.6.3",
         "guzzlehttp/guzzle": "^6.3",
         "imagine/imagine": "^1.1",
         "james-heinrich/getid3": "^1.9",
