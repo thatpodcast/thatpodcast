@@ -1813,16 +1813,16 @@
         },
         {
             "name": "imagine/imagine",
-            "version": "1.1.0",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "05c37ac994e620646b376633c14e6377c35e3399"
+                "reference": "eec39b2092bc8008a92b8d63824476413dbe7511"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/05c37ac994e620646b376633c14e6377c35e3399",
-                "reference": "05c37ac994e620646b376633c14e6377c35e3399",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/eec39b2092bc8008a92b8d63824476413dbe7511",
+                "reference": "eec39b2092bc8008a92b8d63824476413dbe7511",
                 "shasum": ""
             },
             "require": {
@@ -1830,7 +1830,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "2.2.*",
-                "symfony/phpunit-bridge": "^3.2 || ^4.0"
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.4"
             },
             "suggest": {
                 "ext-gd": "to use the GD implementation",
@@ -1867,7 +1867,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2018-10-25T06:45:38+00:00"
+            "time": "2019-07-09T06:55:48+00:00"
         },
         {
             "name": "james-heinrich/getid3",
