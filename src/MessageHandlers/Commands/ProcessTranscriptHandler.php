@@ -38,8 +38,8 @@ class ProcessTranscriptHandler
             return;
         }
 
-        $transcriptHtml = collect(explode("\n", $episode->getTranscriptText()))->map(function ($line) {
-            if (preg_match('/^(.+?):\s+([\d]{2}:[\d]{2})\s+([\S].*)$/', $line, $matches)) {
+        $transcriptHtml = collect(explode("\r\n\r\n", $episode->getTranscriptText()))->map(function ($line) {
+            if (preg_match('/^(.+?)\s+(\([\d]{2}:[\d]{2}\)):\s+([\S].*)$/s', $line, $matches)) {
                 list ($junk, $speaker, $time, $content) = $matches;
 
                 return <<<CHUNK
