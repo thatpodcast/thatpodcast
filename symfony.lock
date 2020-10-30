@@ -98,6 +98,9 @@
     "facebook/webdriver": {
         "version": "1.6.0"
     },
+    "fig/link-util": {
+        "version": "1.1.1"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -121,6 +124,9 @@
     },
     "league/flysystem-aws-s3-v3": {
         "version": "1.0.21"
+    },
+    "league/mime-type-detection": {
+        "version": "1.5.1"
     },
     "manuelodelain/svg-twig-extension": {
         "version": "0.1"
@@ -176,11 +182,17 @@
     "psr/http-message": {
         "version": "1.0.1"
     },
+    "psr/link": {
+        "version": "1.0.0"
+    },
     "psr/log": {
         "version": "1.0.2"
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "ramsey/uuid": {
         "version": "3.8.0"
@@ -359,6 +371,9 @@
     "symfony/polyfill-intl-idn": {
         "version": "v1.12.0"
     },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.20.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"
     },
@@ -448,6 +463,9 @@
     },
     "symfony/var-exporter": {
         "version": "v4.3.7"
+    },
+    "symfony/web-link": {
+        "version": "v4.1.12"
     },
     "symfony/web-profiler-bundle": {
         "version": "3.3",
